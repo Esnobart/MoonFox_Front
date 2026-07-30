@@ -1,12 +1,27 @@
 import * as Dialog from "@radix-ui/react-dialog";
 
 import css from "./Modals.module.css";
+import { useDispatch } from "react-redux";
+import { signIn } from "../../redux/users/operations";
 
 function LoginForm({ onSignupClick, onForgotPasswordClick }) {
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Здесь позже будет запрос на backend.
+    const formData = new FormData(event.currentTarget);
+
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
+    try {
+      await dispatch(signIn(data)).unwrap();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

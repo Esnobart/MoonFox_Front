@@ -1,12 +1,28 @@
 import * as Dialog from "@radix-ui/react-dialog";
 
 import css from "./Modals.module.css";
+import { useDispatch } from "react-redux";
+import { signUp } from "../../redux/users/operations";
 
 function SignupForm({ onLoginClick }) {
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Здесь позже будет запрос регистрации.
+    const formData = new FormData(event.currentTarget);
+
+    const data = {
+      username: formData.get("username"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
+    try {
+      await dispatch(signUp(data)).unwrap();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

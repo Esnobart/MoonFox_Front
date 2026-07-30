@@ -50,7 +50,7 @@ function UserAuthModal() {
               className={css.close}
               aria-label="Close modal"
             >
-              ×
+              x
             </button>
           </Dialog.Close>
         </Dialog.Content>

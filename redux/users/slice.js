@@ -7,7 +7,6 @@ const usersSlice = createSlice({
         user: {
             username: null,
             email: null,
-            password: null,
             avatar: null,
             role: null,
         },
@@ -16,16 +15,20 @@ const usersSlice = createSlice({
         isLogged: false,
         isRefreshing: false
     },
-    extraBuilder: (builder) => 
+    extraReducers: (builder) => 
         builder
     .addCase(signUp.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.isLogged = true;
+        state.userLoading = false;
+        state.isLogged = false;
+        state.token = null;
+        state.user = action.payload.user ?? state.user;
     })
     .addCase(signIn.pending, state => {
         state.userLoading = true;
-    }) 
+    })
+    .addCase(signIn.rejected, state => {
+        state.userLoading = false
+    })
     .addCase(signIn.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
