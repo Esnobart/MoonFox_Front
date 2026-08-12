@@ -1,26 +1,31 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
 
 import css from "./Modals.module.css";
-import { useDispatch } from "react-redux";
 import { signIn } from "../../redux/users/operations";
 
 function LoginForm({ onSignupClick, onForgotPasswordClick }) {
   const dispatch = useDispatch();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    delayError: 1000,
+  });
 
-    const formData = new FormData(event.currentTarget);
-
-    const data = {
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
-
+  const onSubmit = async (data) => {
     try {
       await dispatch(signIn(data)).unwrap();
     } catch (err) {
-      console.log(err);
+      setError("root.server", {
+        type: "server",
+        message: err,
+      });
     }
   };
 
@@ -32,28 +37,41 @@ function LoginForm({ onSignupClick, onForgotPasswordClick }) {
         Enter your account details
       </Dialog.Description>
 
-      <form className={css.form} onSubmit={handleSubmit}>
+      <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
         <input
           className={css.modalInput}
           type="email"
-          name="email"
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Enter a valid email address",
+            },
+          })}
           placeholder="Email"
           autoComplete="email"
-          required
         />
+        {errors.email && (
+          <p className={css.fieldError}>{errors.email.message}</p>
+        )}
 
         <input
           className={css.modalInput}
           type="password"
-          name="password"
           placeholder="Password"
           autoComplete="current-password"
-          required
+          {...register("password", { required: "Password is required" })}
         />
+        {errors.password && (
+          <p className={css.errorText}>{errors.password.message}</p>
+        )}
 
         <button type="submit" className={css.modalSubmitButton}>
           Sign in
         </button>
+        {errors.root?.server && (
+          <p className={css.fieldError}>{errors.root.server.message}</p>
+        )}
       </form>
 
       <div className={css.modalLinks}>
