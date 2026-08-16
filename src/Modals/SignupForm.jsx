@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 import css from "./Modals.module.css";
 import { signUp } from "../../redux/users/operations";
@@ -20,9 +21,9 @@ function SignupForm({ onLoginClick }) {
 
   const onSubmit = async (data) => {
     try {
-      await dispatch(signUp(data)).unwrap();
+      const responce = await dispatch(signUp(data)).unwrap();
 
-      // Handle successful signup (e.g., show a success message, close the modal, etc.)
+      toast.success(responce.message || "Account created successfully!");
     } catch (err) {
       setError("root.server", {
         type: "server",
@@ -84,6 +85,9 @@ function SignupForm({ onLoginClick }) {
         <button type="submit" className={css.modalSubmitButton}>
           Sign up
         </button>
+        {errors.root?.server && (
+          <p className={css.fieldError}>{errors.root.server.message}</p>
+        )}
       </form>
 
       <p className={css.modalText}>
