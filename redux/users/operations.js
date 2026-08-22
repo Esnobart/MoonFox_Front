@@ -63,3 +63,18 @@ export const requestNewPassword = createAsyncThunk(
         }
     }
 )
+
+export const resetPassword = createAsyncThunk(
+    "users/resetPassword",
+    async ({ resetToken, newPassword }, thunkAPI) => {
+        try {
+            const responce = await axios.patch(
+                `users/reset-password/${encodeURIComponent(resetToken)}`,
+                { newPassword },
+            );
+            return responce.data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+)

@@ -6,17 +6,21 @@ import css from "./Modals.module.css";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignupForm.jsx";
 import ForgotPasswordForm from "./ForgotPasswordForm.jsx";
+import ResetPasswordForm from "./ResetPasswordForm.jsx";
 import { logOut } from "../../redux/users/operations";
 import { isUserLogged, userData } from "../../redux/users/selectors";
 
-function UserAuthModal() {
-  const [mode, setMode] = useState("login");
+function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
+  const [mode, setMode] = useState(resetToken ? "resetPassword" : "login");
+  const [open, setOpen] = useState(Boolean(resetToken));
   const dispatch = useDispatch();
   const isLogged = useSelector(isUserLogged);
   const user = useSelector(userData);
 
-  const handleOpenChange = (open) => {
-    if (!open) setMode("login");
+  const handleOpenChange = (nextOpen) => {
+    setOpen(nextOpen);
+
+    if (!nextOpen) setMode("login");
   };
 
   const handleLogout = () => {
@@ -24,7 +28,7 @@ function UserAuthModal() {
   };
 
   return (
-    <Dialog.Root onOpenChange={handleOpenChange}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
         <button
           type="button"
@@ -58,6 +62,7 @@ function UserAuthModal() {
             <>
               {mode === "login" && (
                 <LoginForm
+                  onLoginSuccess={() => setOpen(false)}
                   onSignupClick={() => setMode("signup")}
                   onForgotPasswordClick={() => setMode("forgotPassword")}
                 />
@@ -69,6 +74,17 @@ function UserAuthModal() {
 
               {mode === "forgotPassword" && (
                 <ForgotPasswordForm onLoginClick={() => setMode("login")} />
+              )}
+
+              {mode === "resetPassword" && (
+                <ResetPasswordForm
+                  resetToken={resetToken}
+                  onSuccess={() => {
+                    onResetPasswordSuccess();
+                    setMode("login");
+                    setOpen(false);
+                  }}
+                />
               )}
             </>
           )}

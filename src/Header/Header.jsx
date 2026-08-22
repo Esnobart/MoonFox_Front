@@ -1,7 +1,7 @@
 import AuthModal from "../Modals/AuthModal.jsx";
 import css from "./Header.module.css";
 
-function Header() {
+function Header({ resetToken, onResetPasswordSuccess }) {
   return (
     <header className={css.headerContainer}>
       <div className={css.headerLogoContainer}>
@@ -12,7 +12,10 @@ function Header() {
       </div>
 
       <div className={css.headerButtons}>
-        <AuthModal />
+        <AuthModal
+          resetToken={resetToken}
+          onResetPasswordSuccess={onResetPasswordSuccess}
+        />
         <button type="button" className={css.BasketIconButton}>
           <img src="icons/basket.svg" alt="Basket" className={css.basketIcon} />
         </button>

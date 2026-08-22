@@ -13,6 +13,7 @@ function SignupForm({ onLoginClick }) {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -23,7 +24,12 @@ function SignupForm({ onLoginClick }) {
     try {
       const responce = await dispatch(signUp(data)).unwrap();
 
-      toast.success(responce.message || "Account created successfully!");
+      toast.success(
+        responce.message ||
+          "Please check your email to confirm your account. After verifying your email, you can log in.",
+      );
+      reset();
+      onLoginClick();
     } catch (err) {
       setError("root.server", {
         type: "server",

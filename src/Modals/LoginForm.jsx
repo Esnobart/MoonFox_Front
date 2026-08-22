@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import css from "./Modals.module.css";
 import { signIn } from "../../redux/users/operations";
 
-function LoginForm({ onSignupClick, onForgotPasswordClick }) {
+function LoginForm({ onLoginSuccess, onSignupClick, onForgotPasswordClick }) {
   const dispatch = useDispatch();
 
   const {
@@ -21,6 +21,7 @@ function LoginForm({ onSignupClick, onForgotPasswordClick }) {
   const onSubmit = async (data) => {
     try {
       await dispatch(signIn(data)).unwrap();
+      onLoginSuccess();
     } catch (err) {
       setError("root.server", {
         type: "server",
