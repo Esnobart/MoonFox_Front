@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 import "./App.css";
 // import Filters from "./Filters/Filters.jsx";
-import Header from "./Header/Header.jsx";
+import Header from "./Components/Header/Header.jsx";
 import { refreshUser } from "../redux/users/operations";
 
 const HomePage = lazy(() => import("./Pages/HomePage/HomePage.jsx"));

@@ -1,7 +1,7 @@
-export const userData = state => state.user.user;
+export const userData = state => state.users.user;
 
-export const isUserLogged = state => state.user.isLogged;
+export const isUserLogged = state => state.users.isLogged;
 
-export const isRefreshing = state => state.user.isRefreshing;
+export const isRefreshing = state => state.users.isRefreshing;
 
-export const userLoading = state => state.user.userLoading;
+export const userLoading = state => state.users.userLoading;

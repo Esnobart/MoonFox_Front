@@ -1,17 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { signUp, signIn, logOut, refreshUser } from "./operations"
 
-const initialUser = {
-    username: null,
-    email: null,
-    avatar: null,
-    role: null,
-};
-
 const usersSlice = createSlice({
     name: "user",
     initialState: {
-        user: initialUser,
+        user: {
+            username: null,
+            email: null,
+            avatar: null,
+            role: null
+        },
         userLoading: false,
         isLogged: false,
         isRefreshing: false
@@ -44,19 +42,18 @@ const usersSlice = createSlice({
         state.isRefreshing = false;
     })
     .addCase(refreshUser.rejected, state => {
-        state.user = initialUser;
+        state.user = { username: null, email: null, avatar: null, role: null };
         state.isLogged = false;
         state.isRefreshing = false;
     })
     .addCase(logOut.fulfilled, state => {
-        state.user = initialUser;
+        state.user = { username: null, email: null, avatar: null, role: null };
         state.isLogged = false;
     })
     .addCase(logOut.rejected, state => {
-        state.user = initialUser;
+        state.user = { username: null, email: null, avatar: null, role: null };
         state.isLogged = false;
     })
 })
 
-export const { registration } = usersSlice.actions;
 export const usersReducer = usersSlice.reducer;

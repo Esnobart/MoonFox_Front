@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 import css from "./Modals.module.css";
-import { signUp } from "../../redux/users/operations";
+import { signUp } from "../../../redux/users/operations";
 
 function SignupForm({ onLoginClick }) {
   const dispatch = useDispatch();

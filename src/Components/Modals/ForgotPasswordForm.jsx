@@ -1,19 +1,18 @@
+import * as Dialog from "@radix-ui/react-dialog";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import { requestNewPassword } from "../../redux/users/operations";
+import { requestNewPassword } from "../../../redux/users/operations";
 import css from "./Modals.module.css";
-import { Dialog } from "@radix-ui/react-dialog";
 
-function ForgotPassword() {
+function ForgotPasswordForm({ onLoginClick }) {
   const dispatch = useDispatch();
 
   const {
     register,
     handleSubmit,
     setError,
-    reset,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -22,11 +21,8 @@ function ForgotPassword() {
 
   const onSubmit = async (data) => {
     try {
-      await dispatch(requestNewPassword(data)).unwrap();
-      toast.success(
-        "Password reset instructions have been sent to your email.",
-      );
-      reset();
+      const response = await dispatch(requestNewPassword(data)).unwrap();
+      toast.success(response.message || "Reset link sent successfully!");
     } catch (err) {
       setError("root.server", {
         type: "server",
@@ -37,10 +33,10 @@ function ForgotPassword() {
 
   return (
     <>
-      <Dialog.Title className={css.title}>Forgot Password</Dialog.Title>
+      <Dialog.Title className={css.title}>Reset password</Dialog.Title>
 
       <Dialog.Description className={css.description}>
-        Enter your email to receive password reset instructions.
+        Enter your email to receive reset instructions
       </Dialog.Description>
 
       <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
@@ -57,16 +53,23 @@ function ForgotPassword() {
             },
           })}
         />
-        {errors.email && (
-          <p className={css.errorText}>{errors.email.message}</p>
-        )}
 
         <button type="submit" className={css.modalSubmitButton}>
-          Send Reset Link
+          Send reset link
         </button>
+        {errors.email && (
+          <p className={css.fieldError}>{errors.email.message}</p>
+        )}
       </form>
+
+      <button type="button" className={css.modalLink} onClick={onLoginClick}>
+        Back to sign in
+      </button>
+      {errors.root?.server && (
+        <p className={css.fieldError}>{errors.root.server.message}</p>
+      )}
     </>
   );
 }
 
-export default ForgotPassword;
+export default ForgotPasswordForm;
