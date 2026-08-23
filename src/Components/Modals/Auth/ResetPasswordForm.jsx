@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-import { resetPassword } from "../../../redux/users/operations";
+import { resetPassword } from "../../../../redux/users/operations";
 import css from "./Modals.module.css";
 
 function ResetPasswordForm({ resetToken, onSuccess }) {

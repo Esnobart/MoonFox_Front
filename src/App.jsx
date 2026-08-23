@@ -1,13 +1,17 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Route, Routes } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./App.css";
 // import Filters from "./Filters/Filters.jsx";
+import Footer from "./Components/Footer/Footer.jsx";
 import Header from "./Components/Header/Header.jsx";
 import { refreshUser } from "../redux/users/operations";
 
+const CatalogPage = lazy(() => import("./Pages/CatalogPage/CatalogPage.jsx"));
 const HomePage = lazy(() => import("./Pages/HomePage/HomePage.jsx"));
+const ProductPage = lazy(() => import("./Pages/ProductPage/ProductPage.jsx"));
 
 function App() {
   const dispatch = useDispatch();
@@ -52,15 +56,23 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="appShell">
       <Header
         resetToken={resetToken}
         onResetPasswordSuccess={handleResetPasswordSuccess}
       />
       {/* <Filters /> */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <HomePage />
-      </Suspense>
+      <main className="appMain">
+        <Suspense fallback={<div className="pageLoader">Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/products/:productId" element={<ProductPage />} />
+          </Routes>
+        </Suspense>
+      </main>
+
+      <Footer />
 
       <ToastContainer
         position="top-right"

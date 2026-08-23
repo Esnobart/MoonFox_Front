@@ -8,7 +8,9 @@ const usersSlice = createSlice({
             username: null,
             email: null,
             avatar: null,
-            role: null
+            role: null,
+            whishlist: [],
+            basket: []
         },
         userLoading: false,
         isLogged: false,
@@ -42,16 +44,16 @@ const usersSlice = createSlice({
         state.isRefreshing = false;
     })
     .addCase(refreshUser.rejected, state => {
-        state.user = { username: null, email: null, avatar: null, role: null };
+        state.user = { username: null, email: null, avatar: null, role: null, whishlist: [], basket: [] };
         state.isLogged = false;
         state.isRefreshing = false;
     })
     .addCase(logOut.fulfilled, state => {
-        state.user = { username: null, email: null, avatar: null, role: null };
+        state.user = { username: null, email: null, avatar: null, role: null, whishlist: [], basket: [] };
         state.isLogged = false;
     })
     .addCase(logOut.rejected, state => {
-        state.user = { username: null, email: null, avatar: null, role: null };
+        state.user = { username: null, email: null, avatar: null, role: null, whishlist: [], basket: [] };
         state.isLogged = false;
     })
 })

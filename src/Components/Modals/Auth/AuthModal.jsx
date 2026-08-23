@@ -7,8 +7,8 @@ import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignupForm.jsx";
 import ForgotPasswordForm from "./ForgotPasswordForm.jsx";
 import ResetPasswordForm from "./ResetPasswordForm.jsx";
-import { logOut } from "../../../redux/users/operations.js";
-import { isUserLogged, userData } from "../../../redux/users/selectors.js";
+import { logOut } from "../../../../redux/users/operations.js";
+import { isUserLogged, userData } from "../../../../redux/users/selectors.js";
 
 function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
   const [mode, setMode] = useState(resetToken ? "resetPassword" : "login");

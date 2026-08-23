@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 import css from "./Modals.module.css";
-import { signIn } from "../../../redux/users/operations";
+import { signIn } from "../../../../redux/users/operations";
 
 function LoginForm({ onLoginSuccess, onSignupClick, onForgotPasswordClick }) {
   const dispatch = useDispatch();

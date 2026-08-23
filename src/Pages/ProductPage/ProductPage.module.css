@@ -1,0 +1,43 @@
+.page {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 72px 0;
+}
+
+.backButton {
+  margin: 0 0 32px;
+  padding: 8px 14px;
+  border: 1px solid #d9d4e3;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #17131f;
+  cursor: pointer;
+  font: inherit;
+}
+
+.backButton:hover {
+  border-color: #0a33d9;
+  color: #0a33d9;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #0a33d9;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: #17131f;
+  font-size: 42px;
+  line-height: 1.1;
+}
+
+.text {
+  margin: 16px 0 0;
+  color: #6b6375;
+  font-size: 17px;
+}

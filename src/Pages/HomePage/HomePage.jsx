@@ -1,13 +1,26 @@
 import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 
-import Products from "../../Components/Products/Products";
+import { fetchProducts } from "../../../redux/products/operations.js";
 import {
   productsByPopularity,
   fetchedCollections,
   fetchedAuthors,
-} from "../../redux/products/selectors";
+} from "../../../redux/products/selectors.js";
 
 function HomePage() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const popularProducts = useSelector(productsByPopularity);
+  const collections = useSelector(fetchedCollections);
+  const authors = useSelector(fetchedAuthors);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   return (
     <div>
       <Helmet>
@@ -16,24 +29,25 @@ function HomePage() {
       <section>
         <h1>Official Artist Collabs</h1>
         <ul>
-          {productsByPopularity.map((product) => (
-            <li key={product.id}>
-              <Products location={location} data={product} />
+          {popularProducts.map((product) => (
+            <li key={product._id}>
+              <Link
+                to={`/products/${product._id}`}
+                state={{ from: location }}
+              >
+                {product.name}
+              </Link>
             </li>
           ))}
         </ul>
-        <button onClick={() => (window.location.href = "/products")}>
-          View More
-        </button>
+        <Link to="/catalog">View all</Link>
       </section>
 
       <section>
         <h1>Collections</h1>
         <ul>
-          {fetchedCollections.map((product) => (
-            <li key={product.id}>
-              <Products location={location} data={product} />
-            </li>
+          {collections.map((collection) => (
+            <li key={collection.collectionName}>{collection.collectionName}</li>
           ))}
         </ul>
       </section>
@@ -41,10 +55,8 @@ function HomePage() {
       <section>
         <h1>Follow the Artists</h1>
         <ul>
-          {fetchedAuthors.map((product) => (
-            <li key={product.id}>
-              <Products location={location} data={product} />
-            </li>
+          {authors.map((author) => (
+            <li key={author.author}>{author.author}</li>
           ))}
         </ul>
       </section>

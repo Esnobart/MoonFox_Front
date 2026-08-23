@@ -1,0 +1,16 @@
+.appShell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f7fb;
+}
+
+.appMain {
+  flex: 1;
+}
+
+.pageLoader {
+  padding: 48px 24px;
+  text-align: center;
+  color: #6b6375;
+}
