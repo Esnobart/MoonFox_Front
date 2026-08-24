@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./App.css";
-// import Filters from "./Filters/Filters.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
 import Header from "./Components/Header/Header.jsx";
 import { refreshUser } from "../redux/users/operations";
@@ -61,7 +60,6 @@ function App() {
         resetToken={resetToken}
         onResetPasswordSuccess={handleResetPasswordSuccess}
       />
-      {/* <Filters /> */}
       <main className="appMain">
         <Suspense fallback={<div className="pageLoader">Loading...</div>}>
           <Routes>
