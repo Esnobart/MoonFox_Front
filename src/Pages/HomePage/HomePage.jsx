@@ -9,6 +9,7 @@ import {
   fetchedCollections,
   fetchedAuthors,
 } from "../../../redux/products/selectors.js";
+import css from "./HomePage.module.css";
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -22,42 +23,104 @@ function HomePage() {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className={css.homePage}>
       <Helmet>
         <title>MoonFox | Home</title>
       </Helmet>
-      <section>
-        <h1>Official Artist Collabs</h1>
-        <ul>
-          {popularProducts.map((product) => (
-            <li key={product._id}>
+
+      <section className={css.collabSection}>
+        <div className={css.sectionHeader}>
+          <h1 className={css.sectionTitle}>Official Artist Collab</h1>
+        </div>
+
+        <ul className={`${css.scrollList} ${css.productsList}`}>
+          {popularProducts.slice(0, 10).map((product) => (
+            <li className={css.productItem} key={product._id}>
               <Link
                 to={`/products/${product._id}`}
                 state={{ from: location }}
+                className={css.productLink}
               >
-                {product.name}
+                <img
+                  className={css.productImage}
+                  src={product.img}
+                  alt={product.name}
+                />
+                <div className={css.productInfo}>
+                  <h2 className={css.productName}>{product.name}</h2>
+                  <p>{product.author}</p>
+                  <p>{product.collectionName}</p>
+                </div>
               </Link>
             </li>
           ))}
-        </ul>
-        <Link to="/catalog">View all</Link>
-      </section>
 
-      <section>
-        <h1>Collections</h1>
-        <ul>
-          {collections.map((collection) => (
-            <li key={collection.collectionName}>{collection.collectionName}</li>
-          ))}
+          <li className={css.viewAllItem}>
+            <Link className={css.viewAllCard} to="/catalog">
+              View all
+            </Link>
+          </li>
         </ul>
       </section>
 
-      <section>
-        <h1>Follow the Artists</h1>
-        <ul>
-          {authors.map((author) => (
-            <li key={author.author}>{author.author}</li>
+      <section className={css.collectionsSection}>
+        <h2 className={css.darkSectionTitle}>Collections</h2>
+
+        <ul className={`${css.scrollList} ${css.collectionsList}`}>
+          {collections.slice(0, 10).map((collection) => (
+            <li className={css.collectionItem} key={collection.collectionName}>
+              <Link
+                to={`/catalog?collection=${encodeURIComponent(
+                  collection.collectionName,
+                )}`}
+                className={css.collectionLink}
+              >
+                <img
+                  className={css.collectionImage}
+                  src={collection.products[0]?.img}
+                  alt={collection.collectionName}
+                />
+                <span>{collection.collectionName}</span>
+              </Link>
+            </li>
           ))}
+
+          <li className={css.viewAllItem}>
+            <Link
+              className={`${css.viewAllCard} ${css.darkViewAllCard}`}
+              to="/catalog"
+            >
+              View all
+            </Link>
+          </li>
+        </ul>
+      </section>
+
+      <section className={css.artistsSection}>
+        <h2 className={css.sectionTitle}>Follow the Artists</h2>
+
+        <ul className={`${css.scrollList} ${css.artistsList}`}>
+          {authors.slice(0, 10).map((author) => (
+            <li className={css.artistItem} key={author.author}>
+              <Link
+                to={`/catalog?author=${encodeURIComponent(author.author)}`}
+                className={css.artistLink}
+              >
+                <img
+                  className={css.artistImage}
+                  src={author.products[0]?.img}
+                  alt={author.author}
+                />
+                <span>{author.author}</span>
+              </Link>
+            </li>
+          ))}
+
+          <li className={css.viewAllItem}>
+            <Link className={css.viewAllCard} to="/catalog">
+              View all
+            </Link>
+          </li>
         </ul>
       </section>
     </div>

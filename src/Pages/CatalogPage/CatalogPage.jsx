@@ -1,22 +1,25 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 import SearchBar from "../../Components/SearchBar/SearchBar.jsx";
 import { fetchProducts } from "../../../redux/products/operations.js";
 import { fetchedProducts } from "../../../redux/products/selectors.js";
 import css from "./CatalogPage.module.css";
 
-const PRODUCTS_PER_PAGE = 20;
-
 function CatalogPage() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const products = useSelector(fetchedProducts);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
+  const [searchTerm, setSearchTerm] = useState(
+    () => searchParams.get("search") || "",
+  );
+  const [visibleCount, setVisibleCount] = useState(20);
   const loadMoreRef = useRef(null);
+  const collectionFilter = searchParams.get("collection") || "";
+  const authorFilter = searchParams.get("author") || "";
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -24,8 +27,8 @@ function CatalogPage() {
 
   const filteredProducts = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
-
-    if (!normalizedSearch) return products;
+    const normalizedCollection = collectionFilter.toLowerCase();
+    const normalizedAuthor = authorFilter.toLowerCase();
 
     return products.filter((product) => {
       const searchableText = [
@@ -35,10 +38,18 @@ function CatalogPage() {
       ]
         .join(" ")
         .toLowerCase();
+      const productCollection = product.collectionName?.toLowerCase() || "";
+      const productAuthor = product.author?.toLowerCase() || "";
 
-      return searchableText.includes(normalizedSearch);
+      const matchesSearch =
+        !normalizedSearch || searchableText.includes(normalizedSearch);
+      const matchesCollection =
+        !normalizedCollection || productCollection === normalizedCollection;
+      const matchesAuthor = !normalizedAuthor || productAuthor === normalizedAuthor;
+
+      return matchesSearch && matchesCollection && matchesAuthor;
     });
-  }, [products, searchTerm]);
+  }, [products, searchTerm, collectionFilter, authorFilter]);
 
   const visibleProducts = useMemo(
     () => filteredProducts.slice(0, visibleCount),
@@ -47,8 +58,17 @@ function CatalogPage() {
   const hasMoreProducts = visibleCount < filteredProducts.length;
 
   const handleSearchChange = (nextSearchTerm) => {
+    const nextSearchParams = new URLSearchParams(searchParams);
+
+    if (nextSearchTerm.trim()) {
+      nextSearchParams.set("search", nextSearchTerm);
+    } else {
+      nextSearchParams.delete("search");
+    }
+
+    setSearchParams(nextSearchParams, { replace: true });
     setSearchTerm(nextSearchTerm);
-    setVisibleCount(PRODUCTS_PER_PAGE);
+    setVisibleCount(20);
   };
 
   useEffect(() => {
@@ -61,7 +81,7 @@ function CatalogPage() {
         if (!entry.isIntersecting) return;
 
         setVisibleCount((currentCount) =>
-          Math.min(currentCount + PRODUCTS_PER_PAGE, filteredProducts.length),
+          Math.min(currentCount + 20, filteredProducts.length),
         );
       },
       { rootMargin: "240px" },
