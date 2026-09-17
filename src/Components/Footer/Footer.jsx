@@ -5,8 +5,8 @@ import css from "./Footer.module.css";
 const shopLinks = [
   { to: "/catalog", label: "Catalog" },
   { to: "/catalog?sort=popular", label: "Popular" },
-  { to: "/catalog?section=collections", label: "Collections" },
-  { to: "/catalog?section=artists", label: "Artists" },
+  { to: "/catalog", label: "Collections" },
+  { to: "/catalog", label: "Artists" },
 ];
 
 const supportLinks = ["Shipping", "Returns", "FAQ", "Contact Us"];
@@ -57,7 +57,7 @@ function Footer() {
         <nav className={css.footerColumn} aria-label="Shop">
           <h2 className={css.columnTitle}>Shop</h2>
           {shopLinks.map((link) => (
-            <Link key={link.to} to={link.to} className={css.footerLink}>
+            <Link key={link.label} to={link.to} className={css.footerLink}>
               {link.label}
             </Link>
           ))}

@@ -1,28 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Alata&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap");
+
 .page {
-  width: min(1120px, calc(100% - 32px));
+  width: min(1280px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 72px 0;
+  padding: 42px 0 72px;
+  color: #14101b;
 }
 
 .backButton {
-  margin: 0 0 32px;
-  padding: 8px 14px;
-  border: 1px solid #d9d4e3;
-  border-radius: 8px;
-  background-color: #fff;
-  color: #17131f;
+  margin: 0 0 30px;
+  padding: 0 0 3px;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  color: #14101b;
   cursor: pointer;
   font: inherit;
+  opacity: 0.74;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
 }
 
 .backButton:hover {
-  border-color: #0a33d9;
-  color: #0a33d9;
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.productLayout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.74fr) minmax(340px, 1.08fr) minmax(240px, 0.72fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+
+.infoPanel,
+.buyPanel {
+  min-width: 0;
 }
 
 .eyebrow {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   color: #0a33d9;
+  font-family: "IBM Plex Sans Condensed", sans-serif;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -31,13 +52,322 @@
 
 .title {
   margin: 0;
-  color: #17131f;
-  font-size: 42px;
+  color: #14101b;
+  font-family: "Alata", sans-serif;
+  font-size: clamp(38px, 4.8vw, 78px);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 0.98;
+}
+
+.metaList {
+  display: grid;
+  gap: 10px;
+  margin: 30px 0 0;
+}
+
+.metaItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px 0;
+  border-top: 1px solid #d8d2e1;
+  color: inherit;
+  text-decoration: none;
+}
+
+.metaItem:last-child {
+  border-bottom: 1px solid #d8d2e1;
+}
+
+.metaItem span,
+.detailsList dt {
+  color: #6b6375;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.metaItem strong {
+  color: #14101b;
+  font-size: 18px;
+  font-weight: 600;
   line-height: 1.1;
+  text-align: right;
+}
+
+.description {
+  margin: 28px 0 0;
+  max-width: 36ch;
+  color: #403848;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.imageStage {
+  min-width: 0;
+}
+
+.productImage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  object-fit: contain;
+  background:
+    linear-gradient(135deg, rgba(24, 60, 89, 0.1), rgba(45, 102, 132, 0.16)),
+    #fff;
+}
+
+.buyPanel {
+  display: grid;
+  gap: 24px;
+  align-self: stretch;
+  align-content: center;
+}
+
+.price {
+  margin: 0;
+  color: #14101b;
+  font-family: "IBM Plex Sans Condensed", sans-serif;
+  font-size: clamp(34px, 3.2vw, 52px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stock,
+.soldOut {
+  margin: 10px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.stock {
+  color: #1f6b45;
+}
+
+.soldOut {
+  color: #9b2f3c;
+}
+
+.ageBadge {
+  width: fit-content;
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid #14101b;
+  color: #14101b;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+}
+
+.quantityControl {
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  border: 1px solid #d8d2e1;
+  background-color: #fff;
+}
+
+.quantityButton {
+  border: 0;
+  background: transparent;
+  color: #14101b;
+  cursor: pointer;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.quantityButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+
+.quantityValue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #d8d2e1;
+  border-left: 1px solid #d8d2e1;
+  color: #14101b;
+  font-weight: 700;
+}
+
+.primaryButton,
+.secondaryButton,
+.catalogLink {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.primaryButton {
+  border: 1px solid #14101b;
+  background-color: #14101b;
+  color: #fff;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background-color: #183c59;
+  border-color: #183c59;
+  transform: translateY(-1px);
+}
+
+.primaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+.secondaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.54;
+}
+
+.secondaryButton,
+.catalogLink {
+  border: 1px solid #d8d2e1;
+  background-color: #fff;
+  color: #14101b;
+}
+
+.secondaryButton:hover:not(:disabled),
+.catalogLink:hover {
+  border-color: #183c59;
+  color: #183c59;
+  transform: translateY(-1px);
+}
+
+.savedButton {
+  border-color: #183c59;
+  background-color: #eef6fa;
+  color: #183c59;
+}
+
+.detailsList {
+  display: grid;
+  gap: 14px;
+  margin: 8px 0 0;
+}
+
+.detailsList div {
+  min-width: 0;
+}
+
+.detailsList dt,
+.detailsList dd {
+  margin: 0;
+}
+
+.detailsList dd {
+  margin-top: 4px;
+  color: #14101b;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.stateBlock {
+  min-height: 420px;
+  display: grid;
+  align-content: center;
+  justify-items: start;
 }
 
 .text {
-  margin: 16px 0 0;
+  margin: 18px 0 0;
+  max-width: 48ch;
   color: #6b6375;
   font-size: 17px;
+  line-height: 1.5;
+}
+
+.catalogLink {
+  margin-top: 24px;
+  padding: 0 18px;
+}
+
+@media (max-width: 1040px) {
+  .productLayout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.86fr);
+    align-items: start;
+  }
+
+  .imageStage {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: min(620px, 100%);
+    justify-self: center;
+  }
+
+  .infoPanel {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .buyPanel {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    width: min(100% - 28px, 560px);
+    padding-top: 30px;
+  }
+
+  .backButton {
+    margin-bottom: 24px;
+  }
+
+  .productLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .imageStage {
+    width: 100%;
+    order: 1;
+  }
+
+  .infoPanel {
+    order: 2;
+  }
+
+  .buyPanel {
+    width: 100%;
+    order: 3;
+    gap: 20px;
+  }
+
+  .title {
+    font-size: clamp(34px, 12vw, 52px);
+  }
+
+  .metaItem strong {
+    font-size: 17px;
+  }
+
+  .description {
+    max-width: none;
+  }
 }

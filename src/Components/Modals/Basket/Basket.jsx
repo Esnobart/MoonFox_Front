@@ -1,14 +1,37 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
+import {
+  removeProductFromBasket,
+  updateBasketProductQuantity,
+} from "../../../../redux/users/operations.js";
 import { isUserLogged, userBasket } from "../../../../redux/users/selectors.js";
 import css from "./Basket.module.css";
 
 function Basket() {
+  const dispatch = useDispatch();
   const basket = useSelector(userBasket);
   const isLogged = useSelector(isUserLogged);
   const location = useLocation();
+
+  const updateQuantity = async (productId, quantity) => {
+    try {
+      await dispatch(updateBasketProductQuantity({ productId, quantity })).unwrap();
+    } catch (error) {
+      toast.error(error || "Could not update basket.");
+    }
+  };
+
+  const removeProduct = async (productId) => {
+    try {
+      await dispatch(removeProductFromBasket(productId)).unwrap();
+      toast.success("Removed from basket.");
+    } catch (error) {
+      toast.error(error || "Could not remove this work from basket.");
+    }
+  };
 
   return (
     <Dialog.Root>
@@ -39,6 +62,9 @@ function Basket() {
           ) : (
             <ul className={css.basketList}>
               {basket.map((item) => {
+                const productId = item.product._id;
+                const maxQuantity = Number(item.product.inStock) || item.quantity;
+
                 return (
                   <li className={css.basketItem} key={item._id}>
                     <img
@@ -61,17 +87,43 @@ function Basket() {
                       </h3>
 
                       <p className={css.productMeta}>
-                        by {item.product.author}
-                      </p>
-                      <p className={css.productQuantity}>
-                        Quantity: {item.quantity}
+                        by {item.product.author?.username || "Unknown"}
                       </p>
                       <p className={css.productMeta}>
-                        {item.product.collectionName} collection
+                        {item.product.collectionName?.name || "Unknown"}{" "}
+                        collection
                       </p>
+                      <div className={css.productControls}>
+                        <button
+                          type="button"
+                          className={css.quantityButton}
+                          disabled={item.quantity <= 1}
+                          onClick={() => updateQuantity(productId, item.quantity - 1)}
+                          aria-label={`Decrease ${item.product.name} quantity`}
+                        >
+                          -
+                        </button>
+                        <span className={css.productQuantity}>{item.quantity}</span>
+                        <button
+                          type="button"
+                          className={css.quantityButton}
+                          disabled={item.quantity >= maxQuantity}
+                          onClick={() => updateQuantity(productId, item.quantity + 1)}
+                          aria-label={`Increase ${item.product.name} quantity`}
+                        >
+                          +
+                        </button>
+                      </div>
                       <p className={css.productPrice}>
                         ${(item.product.price * item.quantity).toFixed(2)}
                       </p>
+                      <button
+                        type="button"
+                        className={css.removeButton}
+                        onClick={() => removeProduct(productId)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </li>
                 );

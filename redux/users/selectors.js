@@ -1,6 +1,8 @@
 export const userData = state => state.users.user;
 
-export const userBasket = state => state.users.user.basket;
+export const userBasket = state => state.users.user.basket || [];
+
+export const userWishlist = state => state.users.user.wishlist || [];
 
 export const isUserLogged = state => state.users.isLogged;
 

@@ -35,7 +35,13 @@ function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
           className={css.UserIconButton}
           aria-label="Open account menu"
         >
-          <img src="/icons/user.svg" alt="" aria-hidden="true" />
+          <img
+            src="/icons/user.svg"
+            width="24"
+            height="24"
+            alt=""
+            aria-hidden="true"
+          />
         </button>
       </Dialog.Trigger>
 

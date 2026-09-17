@@ -1,17 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { signUp, signIn, logOut, refreshUser } from "./operations"
+import {
+    signUp,
+    signIn,
+    logOut,
+    refreshUser,
+    addProductToWishlist,
+    removeProductFromWishlist,
+    addProductToBasket,
+    updateBasketProductQuantity,
+    removeProductFromBasket
+} from "./operations"
+
+const createEmptyUser = () => ({
+    username: null,
+    email: null,
+    avatar: null,
+    role: null,
+    wishlist: [],
+    basket: []
+});
+
+const updateUserFromPayload = (state, action) => {
+    state.user = action.payload.user;
+    state.userLoading = false;
+};
+
+const setUserActionPending = (state) => {
+    state.userLoading = true;
+};
+
+const setUserActionRejected = (state) => {
+    state.userLoading = false;
+};
 
 const usersSlice = createSlice({
     name: "user",
     initialState: {
-        user: {
-            username: null,
-            email: null,
-            avatar: null,
-            role: null,
-            whishlist: [],
-            basket: []
-        },
+        user: createEmptyUser(),
         userLoading: false,
         isLogged: false,
         isRefreshing: false
@@ -44,18 +69,33 @@ const usersSlice = createSlice({
         state.isRefreshing = false;
     })
     .addCase(refreshUser.rejected, state => {
-        state.user = { username: null, email: null, avatar: null, role: null, whishlist: [], basket: [] };
+        state.user = createEmptyUser();
         state.isLogged = false;
         state.isRefreshing = false;
     })
     .addCase(logOut.fulfilled, state => {
-        state.user = { username: null, email: null, avatar: null, role: null, whishlist: [], basket: [] };
+        state.user = createEmptyUser();
         state.isLogged = false;
     })
     .addCase(logOut.rejected, state => {
-        state.user = { username: null, email: null, avatar: null, role: null, whishlist: [], basket: [] };
+        state.user = createEmptyUser();
         state.isLogged = false;
     })
+    .addCase(addProductToWishlist.pending, setUserActionPending)
+    .addCase(addProductToWishlist.fulfilled, updateUserFromPayload)
+    .addCase(addProductToWishlist.rejected, setUserActionRejected)
+    .addCase(removeProductFromWishlist.pending, setUserActionPending)
+    .addCase(removeProductFromWishlist.fulfilled, updateUserFromPayload)
+    .addCase(removeProductFromWishlist.rejected, setUserActionRejected)
+    .addCase(addProductToBasket.pending, setUserActionPending)
+    .addCase(addProductToBasket.fulfilled, updateUserFromPayload)
+    .addCase(addProductToBasket.rejected, setUserActionRejected)
+    .addCase(updateBasketProductQuantity.pending, setUserActionPending)
+    .addCase(updateBasketProductQuantity.fulfilled, updateUserFromPayload)
+    .addCase(updateBasketProductQuantity.rejected, setUserActionRejected)
+    .addCase(removeProductFromBasket.pending, setUserActionPending)
+    .addCase(removeProductFromBasket.fulfilled, updateUserFromPayload)
+    .addCase(removeProductFromBasket.rejected, setUserActionRejected)
 })
 
 export const usersReducer = usersSlice.reducer;

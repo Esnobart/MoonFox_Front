@@ -76,3 +76,63 @@ export const resetPassword = createAsyncThunk(
         }
     }
 )
+
+export const addProductToWishlist = createAsyncThunk(
+    "users/addProductToWishlist",
+    async (productId, thunkAPI) => {
+        try {
+            const responce = await api.post(`users/wishlist/${productId}`);
+            return responce.data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+)
+
+export const removeProductFromWishlist = createAsyncThunk(
+    "users/removeProductFromWishlist",
+    async (productId, thunkAPI) => {
+        try {
+            const responce = await api.delete(`users/wishlist/${productId}`);
+            return responce.data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+)
+
+export const addProductToBasket = createAsyncThunk(
+    "users/addProductToBasket",
+    async ({ productId, quantity }, thunkAPI) => {
+        try {
+            const responce = await api.post(`users/basket/${productId}`, { quantity });
+            return responce.data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+)
+
+export const updateBasketProductQuantity = createAsyncThunk(
+    "users/updateBasketProductQuantity",
+    async ({ productId, quantity }, thunkAPI) => {
+        try {
+            const responce = await api.patch(`users/basket/${productId}`, { quantity });
+            return responce.data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+)
+
+export const removeProductFromBasket = createAsyncThunk(
+    "users/removeProductFromBasket",
+    async (productId, thunkAPI) => {
+        try {
+            const responce = await api.delete(`users/basket/${productId}`);
+            return responce.data
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+)

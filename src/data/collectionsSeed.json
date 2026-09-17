@@ -1,0 +1,17 @@
+[
+  {
+    "key": "undertale",
+    "name": "UNDERTALE",
+    "coverImg": "https://placehold.co/960x540/fff0df/201018?text=UNDERTALE"
+  },
+  {
+    "key": "hollow-knight",
+    "name": "Hollow Knight",
+    "coverImg": "https://placehold.co/960x540/e8f1ff/10223a?text=Hollow+Knight"
+  },
+  {
+    "key": "stardew-valley",
+    "name": "Stardew Valley",
+    "coverImg": "https://placehold.co/960x540/edf8e9/1f5130?text=Stardew+Valley"
+  }
+]

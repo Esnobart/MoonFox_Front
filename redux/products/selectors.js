@@ -1,41 +1,67 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-export const fetchedProducts = state => state.products.products;
+export const fetchedProducts = (state) => state.products.products;
+
+export const fetchedTempProduct = (state) => state.products.tempProduct;
+
+export const productsLoading = (state) => state.products.loading;
+
+export const productsRejected = (state) => state.products.rejected;
 
 export const productsByPopularity = createSelector(
-    [fetchedProducts],
-    products => [...products].sort((a, b) => (b.popular ?? 0) - (a.popular ?? 0))
+  [fetchedProducts],
+  (products) =>
+    [...products]
+      .sort(
+        (firstProduct, secondProduct) =>
+          (secondProduct.popular || 0) - (firstProduct.popular || 0),
+      )
+      .slice(0, 10),
 );
 
-const groupProductsBy = (products, fieldName) => {
-    const groupedProducts = products.reduce((groups, product) => {
-        const groupName = product[fieldName] || "Unknown";
+export const fetchedAuthors = createSelector([fetchedProducts], (products) => {
+  const authors = new Map();
 
-        if (!groups[groupName]) {
-            groups[groupName] = {
-                [fieldName]: groupName,
-                products: []
-            };
-        }
+  products.forEach((product) => {
+    const author = product.author;
 
-        groups[groupName].products.push(product);
+    if (!author?._id) return;
 
-        return groups;
-    }, {});
+    const currentAuthor = authors.get(author._id) || {
+      ...author,
+      products: [],
+    };
 
-    return Object.values(groupedProducts).sort((a, b) =>
-        String(a[fieldName]).localeCompare(String(b[fieldName]))
-    );
-};
+    currentAuthor.products.push(product);
+    authors.set(author._id, currentAuthor);
+  });
 
-export const fetchedAuthors = createSelector(
-    [fetchedProducts],
-    products => groupProductsBy(products, "author")
-);
+  return [...authors.values()].sort((firstAuthor, secondAuthor) =>
+    firstAuthor.username.localeCompare(secondAuthor.username),
+  );
+});
 
 export const fetchedCollections = createSelector(
-    [fetchedProducts],
-    products => groupProductsBy(products, "collectionName")
-);
+  [fetchedProducts],
+  (products) => {
+    const collections = new Map();
 
-export const fetchedTempProduct = state => state.products.tempProduct;
+    products.forEach((product) => {
+      const collection = product.collectionName;
+
+      if (!collection?._id) return;
+
+      const currentCollection = collections.get(collection._id) || {
+        ...collection,
+        products: [],
+      };
+
+      currentCollection.products.push(product);
+      collections.set(collection._id, currentCollection);
+    });
+
+    return [...collections.values()].sort((firstCollection, secondCollection) =>
+      firstCollection.name.localeCompare(secondCollection.name),
+    );
+  },
+);

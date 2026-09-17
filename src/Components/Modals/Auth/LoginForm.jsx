@@ -18,9 +18,11 @@ function LoginForm({ onLoginSuccess, onSignupClick, onForgotPasswordClick }) {
     delayError: 1000,
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async ({ emailOrUsername, password }) => {
+    const login = emailOrUsername.trim();
+
     try {
-      await dispatch(signIn(data)).unwrap();
+      await dispatch(signIn({ email: login, username: login, password })).unwrap();
       onLoginSuccess();
     } catch (err) {
       setError("root.server", {
@@ -41,19 +43,17 @@ function LoginForm({ onLoginSuccess, onSignupClick, onForgotPasswordClick }) {
       <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
         <input
           className={css.modalInput}
-          type="email"
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Enter a valid email address",
-            },
+          type="text"
+          {...register("emailOrUsername", {
+            required: "Email or username is required",
+            validate: (value) =>
+              value.trim().length > 0 || "Email or username is required",
           })}
-          placeholder="Email"
-          autoComplete="email"
+          placeholder="Email or username"
+          autoComplete="username"
         />
-        {errors.email && (
-          <p className={css.fieldError}>{errors.email.message}</p>
+        {errors.emailOrUsername && (
+          <p className={css.fieldError}>{errors.emailOrUsername.message}</p>
         )}
 
         <input

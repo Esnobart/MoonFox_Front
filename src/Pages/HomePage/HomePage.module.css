@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
+
 .homePage {
   background-color: #f8f7fb;
   color: #14101b;
@@ -5,8 +8,8 @@
 
 .collabSection,
 .artistsSection {
-  width: min(1180px, calc(100% - 32px));
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
 }
 
 .collabSection {
@@ -23,9 +26,9 @@
 .darkSectionTitle {
   margin: 0;
   font-size: 36px;
-  font-weight: 600;
   line-height: 1.15;
   text-align: center;
+  font-family: 'Alata', sans-serif;
 }
 
 .sectionTitle {
@@ -37,28 +40,25 @@
 }
 
 .scrollList {
+  box-sizing: border-box;
   display: flex;
-  gap: 32px;
+  gap: clamp(18px, 2vw, 32px);
   margin: 0;
-  padding: 0 0 14px;
+  padding: 0 clamp(16px, 4vw, 48px) 14px;
   overflow-x: auto;
   overflow-y: hidden;
   list-style: none;
-  scroll-padding-inline: 2px;
-  scroll-snap-type: x mandatory;
+  scroll-padding-inline: clamp(16px, 4vw, 48px);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .scrollList::-webkit-scrollbar {
-  height: 8px;
+  display: none;
 }
 
-.scrollList::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-.scrollList::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background-color: rgba(20, 16, 27, 0.22);
+.centeredScrollList {
+  justify-content: center;
 }
 
 .productsList {
@@ -66,29 +66,27 @@
 }
 
 .productsList .productItem {
-  flex: 0 0 clamp(220px, 23vw, 270px);
+  flex: 0 0 clamp(180px, 10.5vw, 270px);
 }
 
 .collectionsList .collectionItem {
-  flex: 0 0 clamp(260px, 30vw, 360px);
+  flex: 0 0 clamp(240px, 14vw, 360px);
 }
 
 .artistsList .artistItem {
-  flex: 0 0 clamp(150px, 18vw, 190px);
+  flex: 0 0 clamp(120px, 7vw, 190px);
 }
 
 .productItem,
 .collectionItem,
-.artistItem,
-.viewAllItem {
+.artistItem {
   min-width: 0;
-  scroll-snap-align: start;
 }
 
 .productLink,
 .collectionLink,
 .artistLink,
-.viewAllCard {
+.viewAllLink {
   color: inherit;
   text-decoration: none;
 }
@@ -132,16 +130,24 @@
   color: #14101b;
   font-size: 19px;
   line-height: 1.3;
+  font-family: 'IBM Plex Sans Condensed', sans-serif;
+}
+
+.productInfo .productPrice {
+  padding-top: 8px;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .collectionsSection {
   padding: 20px 0 30px;
-  background-color: #183c59;
+  background:
+    linear-gradient(135deg, #183c59 0%, #2d6684 100%);
 }
 
 .collectionsList {
-  width: min(1180px, calc(100% - 32px));
-  margin: 16px auto 0;
+  width: 100%;
+  margin: 16px 0 0;
 }
 
 .collectionLink {
@@ -160,6 +166,11 @@
   object-fit: cover;
   background-color: #fff;
   transition: transform 180ms ease;
+}
+
+.collectionLink span,
+.artistLink span {
+  overflow-wrap: anywhere;
 }
 
 .artistsSection {
@@ -189,69 +200,55 @@
   transition: transform 180ms ease;
 }
 
-.productsList .viewAllItem {
-  flex: 0 0 clamp(180px, 20vw, 220px);
-}
-
-.collectionsList .viewAllItem {
-  flex: 0 0 clamp(220px, 24vw, 260px);
-}
-
-.artistsList .viewAllItem {
-  flex: 0 0 clamp(150px, 18vw, 190px);
-}
-
-.viewAllCard {
-  min-height: 100%;
-  box-sizing: border-box;
+.viewAllRow {
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
-  border: 1px solid #14101b;
-  background-color: transparent;
+  padding: 10px clamp(16px, 4vw, 48px) 0;
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
   color: #14101b;
-  font-size: 18px;
+  font-family: 'IBM Plex Sans Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  border-bottom: 1px solid currentColor;
+  opacity: 0.76;
   transition:
-    background-color 160ms ease,
-    color 160ms ease,
+    opacity 160ms ease,
     transform 160ms ease;
 }
 
-.viewAllCard:hover {
-  background-color: #14101b;
-  color: #fff;
-  transform: translateY(-3px);
+.viewAllLink:hover {
+  opacity: 1;
+  transform: translateY(-1px);
 }
 
-.darkViewAllCard {
-  border-color: #fff;
+.darkViewAllLink {
   color: #fff;
-}
-
-.darkViewAllCard:hover {
-  background-color: #fff;
-  color: #183c59;
+  opacity: 0.82;
 }
 
 @media (max-width: 920px) {
   .scrollList {
-    gap: 22px;
+    gap: 20px;
+    padding-right: clamp(14px, 3vw, 28px);
+    padding-left: clamp(14px, 3vw, 28px);
+    scroll-padding-inline: clamp(14px, 3vw, 28px);
   }
 
-  .productsList .productItem,
-  .productsList .viewAllItem {
-    flex-basis: clamp(220px, 38vw, 300px);
+  .productsList .productItem {
+    flex-basis: clamp(180px, 28vw, 220px);
   }
 
-  .collectionsList .collectionItem,
-  .collectionsList .viewAllItem {
-    flex-basis: clamp(260px, 46vw, 360px);
+  .collectionsList .collectionItem {
+    flex-basis: clamp(230px, 42vw, 320px);
   }
 
-  .artistsList .artistItem,
-  .artistsList .viewAllItem {
-    flex-basis: 180px;
+  .artistsList .artistItem {
+    flex-basis: clamp(120px, 18vw, 150px);
   }
 }
 
@@ -265,23 +262,38 @@
     font-size: 30px;
   }
 
-  .productsList .productItem,
-  .productsList .viewAllItem,
-  .collectionsList .collectionItem,
-  .collectionsList .viewAllItem {
-    flex-basis: 78vw;
+  .scrollList {
+    gap: 16px;
+    padding-right: 16px;
+    padding-left: 16px;
+    scroll-padding-inline: 16px;
+  }
+
+  .productsList .productItem {
+    flex-basis: clamp(170px, 62vw, 240px);
+  }
+
+  .collectionsList .collectionItem {
+    flex-basis: clamp(220px, 78vw, 300px);
   }
 
   .artistsList {
     margin-top: 36px;
   }
 
-  .artistsList .artistItem,
-  .artistsList .viewAllItem {
-    flex-basis: 44vw;
+  .artistsList .artistItem {
+    flex-basis: clamp(112px, 34vw, 140px);
   }
 
   .productName {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .productInfo p {
+    font-size: 17px;
+  }
+
+  .productInfo .productPrice {
+    font-size: 21px;
   }
 }

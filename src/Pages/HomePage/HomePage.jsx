@@ -1,29 +1,108 @@
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 import { fetchProducts } from "../../../redux/products/operations.js";
 import {
-  productsByPopularity,
-  fetchedCollections,
   fetchedAuthors,
+  fetchedCollections,
+  productsByPopularity,
 } from "../../../redux/products/selectors.js";
 import css from "./HomePage.module.css";
+
+const formatPrice = (price) => `$${price}`;
+
+const getWheelScrollDelta = (event, list) => {
+  const rawDelta =
+    Math.abs(event.deltaX) > Math.abs(event.deltaY)
+      ? event.deltaX
+      : event.deltaY;
+
+  if (event.deltaMode === 1) {
+    return rawDelta * 32;
+  }
+
+  if (event.deltaMode === 2) {
+    return rawDelta * list.clientWidth;
+  }
+
+  return rawDelta;
+};
+
+const scrollHorizontalListWithWheel = (event) => {
+  const list = event.target.closest("[data-horizontal-scroll]");
+
+  if (!list) {
+    return;
+  }
+
+  const maxScrollLeft = list.scrollWidth - list.clientWidth;
+
+  if (maxScrollLeft <= 0) {
+    return;
+  }
+
+  const previousScrollLeft = list.scrollLeft;
+  const scrollDelta = getWheelScrollDelta(event, list);
+  const nextScrollLeft = Math.max(
+    0,
+    Math.min(previousScrollLeft + scrollDelta, maxScrollLeft),
+  );
+
+  event.preventDefault();
+  list.scrollLeft = nextScrollLeft;
+};
 
 function HomePage() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const collectionsListRef = useRef(null);
+  const [isCollectionsCentered, setIsCollectionsCentered] = useState(false);
   const popularProducts = useSelector(productsByPopularity);
-  const collections = useSelector(fetchedCollections);
-  const authors = useSelector(fetchedAuthors);
+  const homeCollections = useSelector(fetchedCollections).slice(0, 10);
+  const featuredAuthors = useSelector(fetchedAuthors).slice(0, 10);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    document.addEventListener("wheel", scrollHorizontalListWithWheel, {
+      capture: true,
+      passive: false,
+    });
+
+    return () => {
+      document.removeEventListener(
+        "wheel",
+        scrollHorizontalListWithWheel,
+        true,
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateCollectionsAlignment = () => {
+      const list = collectionsListRef.current;
+
+      if (!list) {
+        return;
+      }
+
+      setIsCollectionsCentered(list.scrollWidth <= list.clientWidth + 1);
+    };
+
+    updateCollectionsAlignment();
+    window.addEventListener("resize", updateCollectionsAlignment);
+
+    return () => {
+      window.removeEventListener("resize", updateCollectionsAlignment);
+    };
+  }, [homeCollections.length]);
+
   return (
-    <div className={css.homePage}>
+    <section className={css.homePage}>
       <Helmet>
         <title>MoonFox | Home</title>
       </Helmet>
@@ -33,8 +112,11 @@ function HomePage() {
           <h1 className={css.sectionTitle}>Official Artist Collab</h1>
         </div>
 
-        <ul className={`${css.scrollList} ${css.productsList}`}>
-          {popularProducts.slice(0, 10).map((product) => (
+        <ul
+          className={`${css.scrollList} ${css.productsList}`}
+          data-horizontal-scroll
+        >
+          {popularProducts.map((product) => (
             <li className={css.productItem} key={product._id}>
               <Link
                 to={`/products/${product._id}`}
@@ -46,84 +128,100 @@ function HomePage() {
                   src={product.img}
                   alt={product.name}
                 />
+
                 <div className={css.productInfo}>
                   <h2 className={css.productName}>{product.name}</h2>
-                  <p>{product.author}</p>
-                  <p>{product.collectionName}</p>
+                  <p>{product.author?.username}</p>
+                  <p>{product.collectionName?.name}</p>
+                  <p className={css.productPrice}>
+                    {formatPrice(product.price)}
+                  </p>
                 </div>
               </Link>
             </li>
           ))}
-
-          <li className={css.viewAllItem}>
-            <Link className={css.viewAllCard} to="/catalog">
-              View all
-            </Link>
-          </li>
         </ul>
+
+        <div className={css.viewAllRow}>
+          <Link to="/catalog" state={{ from: location }} className={css.viewAllLink}>
+            View all
+          </Link>
+        </div>
       </section>
 
       <section className={css.collectionsSection}>
         <h2 className={css.darkSectionTitle}>Collections</h2>
 
-        <ul className={`${css.scrollList} ${css.collectionsList}`}>
-          {collections.slice(0, 10).map((collection) => (
-            <li className={css.collectionItem} key={collection.collectionName}>
+        <ul
+          ref={collectionsListRef}
+          className={`${css.scrollList} ${css.collectionsList} ${
+            isCollectionsCentered ? css.centeredScrollList : ""
+          }`}
+          data-horizontal-scroll
+        >
+          {homeCollections.map((collection) => (
+            <li className={css.collectionItem} key={collection._id}>
               <Link
-                to={`/catalog?collection=${encodeURIComponent(
-                  collection.collectionName,
-                )}`}
+                to={`/catalog?collection=${encodeURIComponent(collection.name)}`}
+                state={{ from: location }}
                 className={css.collectionLink}
               >
                 <img
                   className={css.collectionImage}
-                  src={collection.products[0]?.img}
-                  alt={collection.collectionName}
+                  src={collection.coverImg}
+                  alt={collection.name}
                 />
-                <span>{collection.collectionName}</span>
+                <span>{collection.name}</span>
               </Link>
             </li>
           ))}
-
-          <li className={css.viewAllItem}>
-            <Link
-              className={`${css.viewAllCard} ${css.darkViewAllCard}`}
-              to="/catalog"
-            >
-              View all
-            </Link>
-          </li>
         </ul>
+
+        <div className={css.viewAllRow}>
+          <Link
+            to="/catalog"
+            state={{ from: location }}
+            className={`${css.viewAllLink} ${css.darkViewAllLink}`}
+          >
+            View all
+          </Link>
+        </div>
       </section>
 
       <section className={css.artistsSection}>
-        <h2 className={css.sectionTitle}>Follow the Artists</h2>
+        <div className={css.sectionHeader}>
+          <h2 className={css.sectionTitle}>Follow the Artists</h2>
+        </div>
 
-        <ul className={`${css.scrollList} ${css.artistsList}`}>
-          {authors.slice(0, 10).map((author) => (
-            <li className={css.artistItem} key={author.author}>
+        <ul
+          className={`${css.scrollList} ${css.artistsList}`}
+          data-horizontal-scroll
+        >
+          {featuredAuthors.map((author) => (
+            <li className={css.artistItem} key={author._id}>
               <Link
-                to={`/catalog?author=${encodeURIComponent(author.author)}`}
+                to={`/catalog?author=${encodeURIComponent(author.username)}`}
+                state={{ from: location }}
                 className={css.artistLink}
               >
                 <img
                   className={css.artistImage}
-                  src={author.products[0]?.img}
-                  alt={author.author}
+                  src={author.avatar}
+                  alt={author.username}
                 />
-                <span>{author.author}</span>
+                <span>{author.username}</span>
               </Link>
             </li>
           ))}
-
-          <li className={css.viewAllItem}>
-            <Link className={css.viewAllCard} to="/catalog">
-              View all
-            </Link>
-          </li>
         </ul>
+
+        <div className={css.viewAllRow}>
+          <Link to="/catalog" state={{ from: location }} className={css.viewAllLink}>
+            View all
+          </Link>
+        </div>
       </section>
-    </div>
+    </section>
   );
 }
 

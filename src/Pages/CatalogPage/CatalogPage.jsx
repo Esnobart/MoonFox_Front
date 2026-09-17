@@ -31,15 +31,17 @@ function CatalogPage() {
     const normalizedAuthor = authorFilter.toLowerCase();
 
     return products.filter((product) => {
+      const authorName = product.author?.username || "Unknown";
+      const collectionName = product.collectionName?.name || "Unknown";
       const searchableText = [
         product.name,
-        product.author,
-        product.collectionName,
+        authorName,
+        collectionName,
       ]
         .join(" ")
         .toLowerCase();
-      const productCollection = product.collectionName?.toLowerCase() || "";
-      const productAuthor = product.author?.toLowerCase() || "";
+      const productCollection = collectionName.toLowerCase();
+      const productAuthor = authorName.toLowerCase();
 
       const matchesSearch =
         !normalizedSearch || searchableText.includes(normalizedSearch);
@@ -125,8 +127,8 @@ function CatalogPage() {
                 <h2 className={css.productName}>{product.name}</h2>
 
                 <div className={css.productMeta}>
-                  <span>{product.author}</span>
-                  <span>{product.collectionName}</span>
+                  <span>{product.author?.username || "Unknown"}</span>
+                  <span>{product.collectionName?.name || "Unknown"}</span>
                 </div>
               </div>
             </Link>

@@ -10,6 +10,11 @@ const productsSlice = createSlice({
         loading: false,
         rejected: false
     },
+    reducers: {
+        clearTempProduct: (state) => {
+            state.tempProduct = null;
+        }
+    },
     extraReducers: (builder) => {
        builder
         .addCase(fetchProducts.fulfilled, (state, action) => {
@@ -33,6 +38,7 @@ const productsSlice = createSlice({
         .addCase(fetchProductById.pending, (state) => {
             state.loading = true;
             state.rejected = false;
+            state.tempProduct = null;
         })
         .addCase(fetchProductById.rejected, (state) => {
             state.loading = false;
@@ -41,4 +47,5 @@ const productsSlice = createSlice({
     }
 });
 
+export const { clearTempProduct } = productsSlice.actions;
 export const productsReducer = productsSlice.reducer;
