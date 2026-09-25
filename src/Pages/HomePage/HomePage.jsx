@@ -11,8 +11,6 @@ import {
 } from "../../../redux/products/selectors.js";
 import css from "./HomePage.module.css";
 
-const formatPrice = (price) => `$${price}`;
-
 const getWheelScrollDelta = (event, list) => {
   const rawDelta =
     Math.abs(event.deltaX) > Math.abs(event.deltaY)
@@ -134,7 +132,7 @@ function HomePage() {
                   <p>{product.author?.username}</p>
                   <p>{product.collectionName?.name}</p>
                   <p className={css.productPrice}>
-                    {formatPrice(product.price)}
+                    {`$${Number(product.price || 0).toFixed(2)}`}
                   </p>
                 </div>
               </Link>
@@ -143,7 +141,11 @@ function HomePage() {
         </ul>
 
         <div className={css.viewAllRow}>
-          <Link to="/catalog" state={{ from: location }} className={css.viewAllLink}>
+          <Link
+            to="/catalog"
+            state={{ from: location }}
+            className={css.viewAllLink}
+          >
             View all
           </Link>
         </div>
@@ -216,7 +218,11 @@ function HomePage() {
         </ul>
 
         <div className={css.viewAllRow}>
-          <Link to="/catalog" state={{ from: location }} className={css.viewAllLink}>
+          <Link
+            to="/catalog"
+            state={{ from: location }}
+            className={css.viewAllLink}
+          >
             View all
           </Link>
         </div>

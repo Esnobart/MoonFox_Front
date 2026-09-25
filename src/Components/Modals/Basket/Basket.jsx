@@ -1,33 +1,123 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import {
+  addProductToBasket,
   removeProductFromBasket,
   updateBasketProductQuantity,
 } from "../../../../redux/users/operations.js";
-import { isUserLogged, userBasket } from "../../../../redux/users/selectors.js";
+import {
+  isUserLogged,
+  userBasket,
+  userLoading,
+} from "../../../../redux/users/selectors.js";
+import {
+  GUEST_BASKET_EVENT,
+  getGuestBasket,
+  removeGuestBasketProduct,
+  saveGuestBasket,
+  updateGuestBasketQuantity,
+} from "../../../utils/guestBasket.js";
 import css from "./Basket.module.css";
+
+const formatPrice = (price) => `$${Number(price || 0).toFixed(2)}`;
 
 function Basket() {
   const dispatch = useDispatch();
-  const basket = useSelector(userBasket);
+  const accountBasket = useSelector(userBasket);
   const isLogged = useSelector(isUserLogged);
+  const isLoading = useSelector(userLoading);
   const location = useLocation();
+  const [guestBasket, setGuestBasket] = useState(getGuestBasket);
+  const mergeAttempted = useRef(false);
+  const basket = isLogged ? accountBasket : guestBasket;
+  const itemCount = basket.reduce((total, item) => total + item.quantity, 0);
+  const subtotal = basket.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0,
+  );
+
+  useEffect(() => {
+    const handleGuestBasketChange = (event) => {
+      setGuestBasket(event.detail || getGuestBasket());
+    };
+    const handleStorageChange = () => setGuestBasket(getGuestBasket());
+
+    window.addEventListener(GUEST_BASKET_EVENT, handleGuestBasketChange);
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener(GUEST_BASKET_EVENT, handleGuestBasketChange);
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLogged) {
+      mergeAttempted.current = false;
+      return;
+    }
+
+    if (mergeAttempted.current || guestBasket.length === 0) {
+      return;
+    }
+
+    mergeAttempted.current = true;
+
+    const mergeGuestBasket = async () => {
+      const failedItems = [];
+
+      for (const item of guestBasket) {
+        try {
+          await dispatch(
+            addProductToBasket({
+              productId: item.product._id,
+              quantity: item.quantity,
+            }),
+          ).unwrap();
+        } catch {
+          failedItems.push(item);
+        }
+      }
+
+      saveGuestBasket(failedItems);
+
+      if (failedItems.length === 0) {
+        toast.success("Guest basket moved to your account.");
+      } else {
+        toast.warning("Some basket items could not be moved to your account.");
+      }
+    };
+
+    mergeGuestBasket();
+  }, [dispatch, guestBasket, isLogged]);
 
   const updateQuantity = async (productId, quantity) => {
+    if (!isLogged) {
+      updateGuestBasketQuantity(productId, quantity);
+      return;
+    }
+
     try {
-      await dispatch(updateBasketProductQuantity({ productId, quantity })).unwrap();
+      await dispatch(
+        updateBasketProductQuantity({ productId, quantity }),
+      ).unwrap();
     } catch (error) {
       toast.error(error || "Could not update basket.");
     }
   };
 
   const removeProduct = async (productId) => {
+    if (!isLogged) {
+      removeGuestBasketProduct(productId);
+      return;
+    }
+
     try {
       await dispatch(removeProductFromBasket(productId)).unwrap();
-      toast.success("Removed from basket.");
     } catch (error) {
       toast.error(error || "Could not remove this work from basket.");
     }
@@ -39,9 +129,14 @@ function Basket() {
         <button
           type="button"
           className={css.basketIconButton}
-          aria-label="Open basket"
+          aria-label={`Open basket, ${itemCount} items`}
         >
           <img src="/icons/basket.svg" alt="" className={css.basketIcon} />
+          {itemCount > 0 && (
+            <span className={css.basketBadge} aria-hidden="true">
+              {itemCount > 99 ? "99+" : itemCount}
+            </span>
+          )}
         </button>
       </Dialog.Trigger>
 
@@ -49,93 +144,150 @@ function Basket() {
         <Dialog.Overlay className={css.dialogOverlay} />
 
         <Dialog.Content className={css.dialogContent}>
-          <Dialog.Title className={css.title}>Basket</Dialog.Title>
+          <header className={css.dialogHeader}>
+            <div>
+              <Dialog.Title className={css.title}>Your basket</Dialog.Title>
+              <Dialog.Description className={css.description}>
+                {isLogged
+                  ? `${itemCount} ${itemCount === 1 ? "item" : "items"}`
+                  : "Saved on this device"}
+              </Dialog.Description>
+            </div>
 
-          {!isLogged ? (
-            <Dialog.Description className={css.description}>
-              Sign in to see your basket.
-            </Dialog.Description>
-          ) : basket.length === 0 ? (
-            <Dialog.Description className={css.description}>
-              Your basket is empty.
-            </Dialog.Description>
-          ) : (
-            <ul className={css.basketList}>
-              {basket.map((item) => {
-                const productId = item.product._id;
-                const maxQuantity = Number(item.product.inStock) || item.quantity;
+            <Dialog.Close asChild>
+              <button type="button" className={css.close} aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </Dialog.Close>
+          </header>
 
-                return (
-                  <li className={css.basketItem} key={item._id}>
-                    <img
-                      src={item.product.img}
-                      alt=""
-                      className={css.productImage}
-                    />
+          <div className={css.dialogBody}>
+            {basket.length === 0 ? (
+              <div className={css.emptyState}>
+                <p>Your basket is empty.</p>
+                <Dialog.Close asChild>
+                  <Link to="/catalog" className={css.catalogLink}>
+                    Browse catalog
+                  </Link>
+                </Dialog.Close>
+              </div>
+            ) : (
+              <ul className={css.basketList}>
+                {basket.map((item) => {
+                  const productId = item.product._id;
+                  const maxQuantity =
+                    Number(item.product.inStock) || item.quantity;
 
-                    <div className={css.productInfo}>
-                      <h3 className={css.productName}>
-                        <Dialog.Close asChild>
-                          <Link
-                            to={`/products/${item.product._id}`}
-                            state={{ from: location }}
-                            className={css.productLink}
+                  return (
+                    <li className={css.basketItem} key={item._id || productId}>
+                      <Dialog.Close asChild>
+                        <Link
+                          to={`/products/${productId}`}
+                          state={{ from: location }}
+                          className={css.imageLink}
+                        >
+                          <img
+                            src={item.product.img}
+                            alt={item.product.name}
+                            className={css.productImage}
+                          />
+                        </Link>
+                      </Dialog.Close>
+
+                      <div className={css.productInfo}>
+                        <div className={css.productHeading}>
+                          <div>
+                            <h3 className={css.productName}>
+                              <Dialog.Close asChild>
+                                <Link
+                                  to={`/products/${productId}`}
+                                  state={{ from: location }}
+                                  className={css.productLink}
+                                >
+                                  {item.product.name}
+                                </Link>
+                              </Dialog.Close>
+                            </h3>
+                            <p className={css.productMeta}>
+                              {item.product.author?.username || "MoonFox artist"}
+                              {item.product.collectionName?.name
+                                ? ` / ${item.product.collectionName.name}`
+                                : ""}
+                            </p>
+                          </div>
+                          <p className={css.productPrice}>
+                            {formatPrice(item.product.price * item.quantity)}
+                          </p>
+                        </div>
+
+                        <div className={css.productActions}>
+                          <div
+                            className={css.productControls}
+                            aria-label={`${item.product.name} quantity`}
                           >
-                            {item.product.name}
-                          </Link>
-                        </Dialog.Close>
-                      </h3>
+                            <button
+                              type="button"
+                              className={css.quantityButton}
+                              disabled={item.quantity <= 1 || (isLogged && isLoading)}
+                              onClick={() =>
+                                updateQuantity(productId, item.quantity - 1)
+                              }
+                              aria-label={`Decrease ${item.product.name} quantity`}
+                            >
+                              -
+                            </button>
+                            <span className={css.productQuantity}>
+                              {item.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              className={css.quantityButton}
+                              disabled={
+                                item.quantity >= maxQuantity ||
+                                (isLogged && isLoading)
+                              }
+                              onClick={() =>
+                                updateQuantity(productId, item.quantity + 1)
+                              }
+                              aria-label={`Increase ${item.product.name} quantity`}
+                            >
+                              +
+                            </button>
+                          </div>
 
-                      <p className={css.productMeta}>
-                        by {item.product.author?.username || "Unknown"}
-                      </p>
-                      <p className={css.productMeta}>
-                        {item.product.collectionName?.name || "Unknown"}{" "}
-                        collection
-                      </p>
-                      <div className={css.productControls}>
-                        <button
-                          type="button"
-                          className={css.quantityButton}
-                          disabled={item.quantity <= 1}
-                          onClick={() => updateQuantity(productId, item.quantity - 1)}
-                          aria-label={`Decrease ${item.product.name} quantity`}
-                        >
-                          -
-                        </button>
-                        <span className={css.productQuantity}>{item.quantity}</span>
-                        <button
-                          type="button"
-                          className={css.quantityButton}
-                          disabled={item.quantity >= maxQuantity}
-                          onClick={() => updateQuantity(productId, item.quantity + 1)}
-                          aria-label={`Increase ${item.product.name} quantity`}
-                        >
-                          +
-                        </button>
+                          <button
+                            type="button"
+                            className={css.removeButton}
+                            disabled={isLogged && isLoading}
+                            onClick={() => removeProduct(productId)}
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                      <p className={css.productPrice}>
-                        ${(item.product.price * item.quantity).toFixed(2)}
-                      </p>
-                      <button
-                        type="button"
-                        className={css.removeButton}
-                        onClick={() => removeProduct(productId)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
 
-          <Dialog.Close asChild>
-            <button type="button" className={css.close} aria-label="Close">
-              x
-            </button>
-          </Dialog.Close>
+          {basket.length > 0 && (
+            <footer className={css.dialogFooter}>
+              <div className={css.subtotalRow}>
+                <span>Subtotal</span>
+                <strong>{formatPrice(subtotal)}</strong>
+              </div>
+              <p className={css.footerNote}>
+                Shipping and taxes are calculated at checkout.
+              </p>
+              <Dialog.Close asChild>
+                <button type="button" className={css.continueButton}>
+                  Continue shopping
+                </button>
+              </Dialog.Close>
+            </footer>
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

@@ -21,6 +21,7 @@ import {
   userLoading,
   userWishlist,
 } from "../../../redux/users/selectors.js";
+import { addGuestBasketProduct } from "../../utils/guestBasket.js";
 import css from "./ProductPage.module.css";
 
 const formatPrice = (price) => `$${Number(price || 0).toFixed(2)}`;
@@ -69,7 +70,8 @@ function ProductPage() {
 
   const handleAddToBasket = async () => {
     if (!isLogged) {
-      toast.info("Please sign in to add works to your basket.");
+      addGuestBasketProduct(product, quantity);
+      toast.success("Added to basket.");
       return;
     }
 
@@ -167,12 +169,12 @@ function ProductPage() {
               </Link>
 
               <Link
-                to={`/catalog?collection=${encodeURIComponent(product.collection.name)}`}
+                to={`/catalog?collection=${encodeURIComponent(product.collectionName.name)}`}
                 state={{ from: location }}
                 className={css.metaItem}
               >
                 <span>Collection</span>
-                <strong>{product.collection.name}</strong>
+                <strong>{product.collectionName.name}</strong>
               </Link>
             </div>
 
