@@ -1,10 +1,21 @@
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 
 import AuthModal from "../Modals/Auth/AuthModal.jsx";
 import Basket from "../Modals/Basket/Basket.jsx";
+import {
+  isRefreshing,
+  isUserLogged,
+  userData,
+} from "../../../redux/users/selectors.js";
 import css from "./Header.module.css";
 
 function Header({ resetToken, onResetPasswordSuccess }) {
+  const location = useLocation();
+  const user = useSelector(userData);
+  const isLogged = useSelector(isUserLogged);
+  const authIsRefreshing = useSelector(isRefreshing);
+
   return (
     <header className={css.headerContainer}>
       <Link to="/" className={css.headerLogoContainer}>
@@ -15,10 +26,30 @@ function Header({ resetToken, onResetPasswordSuccess }) {
       </Link>
 
       <div className={css.headerButtons}>
-        <AuthModal
-          resetToken={resetToken}
-          onResetPasswordSuccess={onResetPasswordSuccess}
-        />
+        {authIsRefreshing && !resetToken ? (
+          <button
+            type="button"
+            className={css.accountIconButton}
+            aria-label="Checking account"
+            disabled
+          >
+            <img src="/icons/user.svg" width="24" height="24" alt="" />
+          </button>
+        ) : isLogged && !resetToken ? (
+          <Link
+            to={`/profile/${encodeURIComponent(user.username)}`}
+            state={{ from: location }}
+            className={css.accountIconButton}
+            aria-label="Open your profile"
+          >
+            <img src="/icons/user.svg" width="24" height="24" alt="" />
+          </Link>
+        ) : (
+          <AuthModal
+            resetToken={resetToken}
+            onResetPasswordSuccess={onResetPasswordSuccess}
+          />
+        )}
         <Basket />
       </div>
     </header>

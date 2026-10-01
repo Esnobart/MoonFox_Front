@@ -11,6 +11,10 @@ import { refreshUser } from "../redux/users/operations";
 const CatalogPage = lazy(() => import("./Pages/CatalogPage/CatalogPage.jsx"));
 const HomePage = lazy(() => import("./Pages/HomePage/HomePage.jsx"));
 const ProductPage = lazy(() => import("./Pages/ProductPage/ProductPage.jsx"));
+const ProfilePage = lazy(() => import("./Pages/ProfilePage/ProfilePage.jsx"));
+const AdminSubmissionsPage = lazy(() =>
+  import("./Pages/AdminSubmissionsPage/AdminSubmissionsPage.jsx"),
+);
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +70,11 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/products/:productId" element={<ProductPage />} />
+            <Route path="/profile/:username" element={<ProfilePage />} />
+            <Route
+              path="/admin/submissions"
+              element={<AdminSubmissionsPage />}
+            />
           </Routes>
         </Suspense>
       </main>

@@ -44,15 +44,20 @@ function ProductPage() {
   const isLogged = useSelector(isUserLogged);
   const isUserActionLoading = useSelector(userLoading);
   const wishlist = useSelector(userWishlist);
-  const from = location.state?.from;
-  const backPath = from
-    ? `${from.pathname}${from.search || ""}${from.hash || ""}`
-    : "/";
   const quantity =
     quantityState.productId === productId ? quantityState.value : 1;
   const isSaved = wishlist.some(
     (wishlistProduct) => getProductId(wishlistProduct) === product?._id,
   );
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+
+    navigate("/catalog", { replace: true });
+  };
 
   const decreaseQuantity = () => {
     setQuantityState({
@@ -123,7 +128,7 @@ function ProductPage() {
       <button
         type="button"
         className={css.backButton}
-        onClick={() => navigate(backPath)}
+        onClick={handleBack}
       >
         Back
       </button>
@@ -160,7 +165,7 @@ function ProductPage() {
 
             <div className={css.metaList}>
               <Link
-                to={`/catalog?author=${encodeURIComponent(product.author.username)}`}
+                to={`/profile/${encodeURIComponent(product.author.username)}`}
                 state={{ from: location }}
                 className={css.metaItem}
               >

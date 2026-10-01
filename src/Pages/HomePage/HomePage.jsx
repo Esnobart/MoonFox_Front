@@ -119,30 +119,48 @@ function HomePage() {
               <Link
                 to={`/products/${product._id}`}
                 state={{ from: location }}
-                className={css.productLink}
+                className={css.productImageLink}
               >
                 <img
                   className={css.productImage}
                   src={product.img}
                   alt={product.name}
                 />
-
-                <div className={css.productInfo}>
-                  <h2 className={css.productName}>{product.name}</h2>
-                  <p>{product.author?.username}</p>
-                  <p>{product.collectionName?.name}</p>
-                  <p className={css.productPrice}>
-                    {`$${Number(product.price || 0).toFixed(2)}`}
-                  </p>
-                </div>
               </Link>
+
+              <div className={css.productInfo}>
+                <Link
+                  to={`/products/${product._id}`}
+                  state={{ from: location }}
+                  className={css.productNameLink}
+                >
+                  <h2 className={css.productName}>{product.name}</h2>
+                </Link>
+                <Link
+                  to={`/profile/${encodeURIComponent(product.author?.username || "")}`}
+                  state={{ from: location }}
+                  className={css.productMetaLink}
+                >
+                  {product.author?.username || "Unknown artist"}
+                </Link>
+                <Link
+                  to={`/catalog?collection=${encodeURIComponent(product.collectionName?.name || "")}`}
+                  state={{ from: location }}
+                  className={css.productMetaLink}
+                >
+                  {product.collectionName?.name || "Independent work"}
+                </Link>
+                <p className={css.productPrice}>
+                  {`$${Number(product.price || 0).toFixed(2)}`}
+                </p>
+              </div>
             </li>
           ))}
         </ul>
 
         <div className={css.viewAllRow}>
           <Link
-            to="/catalog"
+            to="/catalog?type=popular"
             state={{ from: location }}
             className={css.viewAllLink}
           >
@@ -181,7 +199,7 @@ function HomePage() {
 
         <div className={css.viewAllRow}>
           <Link
-            to="/catalog"
+            to="/catalog?type=collections"
             state={{ from: location }}
             className={`${css.viewAllLink} ${css.darkViewAllLink}`}
           >
@@ -202,15 +220,21 @@ function HomePage() {
           {featuredAuthors.map((author) => (
             <li className={css.artistItem} key={author._id}>
               <Link
-                to={`/catalog?author=${encodeURIComponent(author.username)}`}
+                to={`/profile/${encodeURIComponent(author.username)}`}
                 state={{ from: location }}
                 className={css.artistLink}
               >
-                <img
-                  className={css.artistImage}
-                  src={author.avatar}
-                  alt={author.username}
-                />
+                {author.avatar ? (
+                  <img
+                    className={css.artistImage}
+                    src={author.avatar}
+                    alt={author.username}
+                  />
+                ) : (
+                  <span className={css.artistFallback} aria-hidden="true">
+                    {author.username.charAt(0).toUpperCase()}
+                  </span>
+                )}
                 <span>{author.username}</span>
               </Link>
             </li>
@@ -219,7 +243,7 @@ function HomePage() {
 
         <div className={css.viewAllRow}>
           <Link
-            to="/catalog"
+            to="/catalog?type=authors"
             state={{ from: location }}
             className={css.viewAllLink}
           >

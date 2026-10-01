@@ -22,7 +22,7 @@ function LoginForm({ onLoginSuccess, onSignupClick, onForgotPasswordClick }) {
     const login = emailOrUsername.trim();
 
     try {
-      await dispatch(signIn({ email: login, username: login, password })).unwrap();
+      await dispatch(signIn({ identifier: login, password })).unwrap();
       onLoginSuccess();
     } catch (err) {
       setError("root.server", {

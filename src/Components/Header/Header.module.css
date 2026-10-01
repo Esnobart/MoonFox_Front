@@ -39,10 +39,19 @@
     align-items: center;
 }
 
-.BasketIconButton {
+.accountIconButton {
     width: 32px;
     height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
     background: none;
-    border: none;
     cursor: pointer;
+}
+
+.accountIconButton:disabled {
+    cursor: wait;
+    opacity: 0.45;
 }

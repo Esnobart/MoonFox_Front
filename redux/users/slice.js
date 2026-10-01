@@ -12,6 +12,7 @@ import {
 } from "./operations"
 
 const createEmptyUser = () => ({
+    _id: null,
     username: null,
     email: null,
     avatar: null,
@@ -39,7 +40,7 @@ const usersSlice = createSlice({
         user: createEmptyUser(),
         userLoading: false,
         isLogged: false,
-        isRefreshing: false
+        isRefreshing: true
     },
     extraReducers: (builder) => 
         builder

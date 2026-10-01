@@ -1,30 +1,20 @@
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useDispatch, useSelector } from "react-redux";
 
 import css from "./Modals.module.css";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignupForm.jsx";
 import ForgotPasswordForm from "./ForgotPasswordForm.jsx";
 import ResetPasswordForm from "./ResetPasswordForm.jsx";
-import { logOut } from "../../../../redux/users/operations.js";
-import { isUserLogged, userData } from "../../../../redux/users/selectors.js";
 
 function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
   const [mode, setMode] = useState(resetToken ? "resetPassword" : "login");
   const [open, setOpen] = useState(Boolean(resetToken));
-  const dispatch = useDispatch();
-  const isLogged = useSelector(isUserLogged);
-  const user = useSelector(userData);
 
   const handleOpenChange = (nextOpen) => {
     setOpen(nextOpen);
 
     if (!nextOpen) setMode("login");
-  };
-
-  const handleLogout = () => {
-    dispatch(logOut());
   };
 
   return (
@@ -49,50 +39,31 @@ function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
         <Dialog.Overlay className={css.DialogOverlay} />
 
         <Dialog.Content className={css.DialogContent}>
-          {isLogged ? (
-            <>
-              <Dialog.Title className={css.title}>Account</Dialog.Title>
-              <Dialog.Description className={css.description}>
-                {user?.username || user?.email}
-              </Dialog.Description>
+          {mode === "login" && (
+            <LoginForm
+              onLoginSuccess={() => setOpen(false)}
+              onSignupClick={() => setMode("signup")}
+              onForgotPasswordClick={() => setMode("forgotPassword")}
+            />
+          )}
 
-              <button
-                type="button"
-                className={css.modalSubmitButton}
-                onClick={handleLogout}
-              >
-                Sign out
-              </button>
-            </>
-          ) : (
-            <>
-              {mode === "login" && (
-                <LoginForm
-                  onLoginSuccess={() => setOpen(false)}
-                  onSignupClick={() => setMode("signup")}
-                  onForgotPasswordClick={() => setMode("forgotPassword")}
-                />
-              )}
+          {mode === "signup" && (
+            <SignupForm onLoginClick={() => setMode("login")} />
+          )}
 
-              {mode === "signup" && (
-                <SignupForm onLoginClick={() => setMode("login")} />
-              )}
+          {mode === "forgotPassword" && (
+            <ForgotPasswordForm onLoginClick={() => setMode("login")} />
+          )}
 
-              {mode === "forgotPassword" && (
-                <ForgotPasswordForm onLoginClick={() => setMode("login")} />
-              )}
-
-              {mode === "resetPassword" && (
-                <ResetPasswordForm
-                  resetToken={resetToken}
-                  onSuccess={() => {
-                    onResetPasswordSuccess();
-                    setMode("login");
-                    setOpen(false);
-                  }}
-                />
-              )}
-            </>
+          {mode === "resetPassword" && (
+            <ResetPasswordForm
+              resetToken={resetToken}
+              onSuccess={() => {
+                onResetPasswordSuccess();
+                setMode("login");
+                setOpen(false);
+              }}
+            />
           )}
 
           <Dialog.Close asChild>

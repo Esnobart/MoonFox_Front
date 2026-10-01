@@ -18,8 +18,8 @@ export const signIn = createAsyncThunk(
     "users/signin",
     async (data, thunkAPI) => {
         try {
-            const responce = await api.post('users/signin', data);
-            return responce.data
+            const response = await api.post('users/signin', data);
+            return response.data
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
         }
