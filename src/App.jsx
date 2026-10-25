@@ -1,6 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./App.css";
@@ -18,10 +18,19 @@ const AdminSubmissionsPage = lazy(() =>
 
 function App() {
   const dispatch = useDispatch();
+  const { pathname, search } = useLocation();
+  const navigationType = useNavigationType();
   const [resetToken, setResetToken] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get("resetToken");
   });
+
+  useLayoutEffect(() => {
+    // Reset new link destinations, while leaving history and live filters alone.
+    if (navigationType === "PUSH") {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [pathname, search, navigationType]);
 
   useEffect(() => {
     dispatch(refreshUser());

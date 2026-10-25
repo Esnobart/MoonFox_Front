@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
@@ -10,6 +10,26 @@ import {
   productsByPopularity,
 } from "../../../redux/products/selectors.js";
 import css from "./HomePage.module.css";
+
+function Arrow() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M4 12h15m-6-6 6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 const getWheelScrollDelta = (event, list) => {
   const rawDelta =
@@ -55,10 +75,8 @@ const scrollHorizontalListWithWheel = (event) => {
 function HomePage() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const collectionsListRef = useRef(null);
-  const [isCollectionsCentered, setIsCollectionsCentered] = useState(false);
   const popularProducts = useSelector(productsByPopularity);
-  const homeCollections = useSelector(fetchedCollections).slice(0, 10);
+  const homeCollections = useSelector(fetchedCollections);
   const featuredAuthors = useSelector(fetchedAuthors).slice(0, 10);
 
   useEffect(() => {
@@ -79,25 +97,6 @@ function HomePage() {
       );
     };
   }, []);
-
-  useEffect(() => {
-    const updateCollectionsAlignment = () => {
-      const list = collectionsListRef.current;
-
-      if (!list) {
-        return;
-      }
-
-      setIsCollectionsCentered(list.scrollWidth <= list.clientWidth + 1);
-    };
-
-    updateCollectionsAlignment();
-    window.addEventListener("resize", updateCollectionsAlignment);
-
-    return () => {
-      window.removeEventListener("resize", updateCollectionsAlignment);
-    };
-  }, [homeCollections.length]);
 
   return (
     <section className={css.homePage}>
@@ -169,42 +168,71 @@ function HomePage() {
         </div>
       </section>
 
-      <section className={css.collectionsSection}>
-        <h2 className={css.darkSectionTitle}>Collections</h2>
+      <section className={css.section} aria-labelledby="home-collections-title">
+        <div className={css.inner}>
+          <div className={css.header}>
+            <h2 id="home-collections-title" className={css.sectionTitle}>
+              Collections
+            </h2>
+            <span className={css.headerLine} aria-hidden="true" />
+          </div>
 
-        <ul
-          ref={collectionsListRef}
-          className={`${css.scrollList} ${css.collectionsList} ${
-            isCollectionsCentered ? css.centeredScrollList : ""
-          }`}
-          data-horizontal-scroll
-        >
-          {homeCollections.map((collection) => (
-            <li className={css.collectionItem} key={collection._id}>
-              <Link
-                to={`/catalog?collection=${encodeURIComponent(collection.name)}`}
-                state={{ from: location }}
-                className={css.collectionLink}
-              >
-                <img
-                  className={css.collectionImage}
-                  src={collection.coverImg}
-                  alt={collection.name}
-                />
-                <span>{collection.name}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <div className={css.viewAllRow}>
-          <Link
-            to="/catalog?type=collections"
-            state={{ from: location }}
-            className={`${css.viewAllLink} ${css.darkViewAllLink}`}
+          <ul
+            id="home-collections-board"
+            className={css.board}
+            aria-label="Featured collections"
           >
-            View all
-          </Link>
+            {homeCollections.map((collection) => (
+              <li key={collection._id} className={css.collection}>
+                <h3 className={css.collectionTitle}>{collection.name}</h3>
+
+                <ul
+                  className={css.products}
+                  aria-label={`${collection.name} products`}
+                >
+                  {collection.products.slice(0, 4).map((product) => (
+                    <li className={css.product} key={product._id}>
+                      <Link
+                        to={`/products/${product._id}`}
+                        state={{ from: location }}
+                        className={css.productLink}
+                      >
+                        <img
+                          src={product.img}
+                          alt={product.name}
+                          className={css.productImage}
+                          loading="lazy"
+                          decoding="async"
+                          width="320"
+                          height="320"
+                        />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  to={`/catalog?collection=${encodeURIComponent(collection.name)}`}
+                  state={{ from: location }}
+                  className={css.collectionButton}
+                  aria-label={`View all ${collection.name} products`}
+                >
+                  View all
+                  <Arrow />
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className={css.footer}>
+            <Link
+              to="/catalog?type=collections"
+              state={{ from: location }}
+              className={css.catalogLink}
+            >
+              All collections <Arrow />
+            </Link>
+          </div>
         </div>
       </section>
 
