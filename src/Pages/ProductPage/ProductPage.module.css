@@ -8,8 +8,43 @@
   color: #14101b;
 }
 
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.editLink {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 1px solid #14101b;
+  background-color: #fff;
+  color: #14101b;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.editLink:hover {
+  background-color: #14101b;
+  color: #fff;
+}
+
+.editLink:focus-visible {
+  outline: 2px solid #0a33d9;
+  outline-offset: 4px;
+}
+
 .backButton {
-  margin: 0 0 30px;
+  margin: 0;
   padding: 0 0 3px;
   border: 0;
   border-bottom: 1px solid currentColor;
@@ -106,6 +141,8 @@
 
 .imageStage {
   min-width: 0;
+  display: grid;
+  gap: 12px;
 }
 
 .productImage {
@@ -116,6 +153,36 @@
   background:
     linear-gradient(135deg, rgba(24, 60, 89, 0.1), rgba(45, 102, 132, 0.16)),
     #fff;
+}
+
+.thumbnails {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.thumbnailButton {
+  min-width: 0;
+  padding: 2px;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.thumbnailButton[aria-pressed="true"] {
+  border-color: #0a33d9;
+}
+
+.thumbnailButton:focus-visible {
+  outline: 2px solid #14101b;
+  outline-offset: 2px;
+}
+
+.thumbnailButton img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .buyPanel {
@@ -334,7 +401,7 @@
     padding-top: 30px;
   }
 
-  .backButton {
+  .toolbar {
     margin-bottom: 24px;
   }
 

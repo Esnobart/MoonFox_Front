@@ -7,6 +7,8 @@ export const fetchedTempProduct = (state) => state.products.tempProduct;
 export const productsLoading = (state) => state.products.loading;
 
 export const productsRejected = (state) => state.products.rejected;
+export const productLoading = (state) => state.products.productLoading;
+export const productRejected = (state) => state.products.productRejected;
 
 export const productsByPopularity = createSelector(
   [fetchedProducts],

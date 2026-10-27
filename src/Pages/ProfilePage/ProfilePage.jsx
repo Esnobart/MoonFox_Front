@@ -44,7 +44,7 @@ function ProductGrid({ products, location, emptyMessage }) {
             className={css.productLink}
           >
             <img
-              src={product.img}
+              src={product.images?.[0] || "/images/product-placeholder.svg"}
               alt={product.name}
               className={css.productImage}
             />

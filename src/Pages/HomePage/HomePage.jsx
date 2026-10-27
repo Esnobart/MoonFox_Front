@@ -122,7 +122,7 @@ function HomePage() {
               >
                 <img
                   className={css.productImage}
-                  src={product.img}
+                  src={product.images?.[0] || "/images/product-placeholder.svg"}
                   alt={product.name}
                 />
               </Link>
@@ -198,7 +198,7 @@ function HomePage() {
                         className={css.productLink}
                       >
                         <img
-                          src={product.img}
+                          src={product.images?.[0] || "/images/product-placeholder.svg"}
                           alt={product.name}
                           className={css.productImage}
                           loading="lazy"

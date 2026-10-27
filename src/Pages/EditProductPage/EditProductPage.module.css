@@ -1,0 +1,409 @@
+.page {
+  width: min(900px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 42px 0 72px;
+  color: #14101b;
+}
+
+.backLink {
+  display: inline-block;
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
+  color: #6b6375;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: #14101b;
+}
+
+.header {
+  margin: 30px 0;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #0a33d9;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: #14101b;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.productName {
+  margin: 14px 0 0;
+  color: #6b6375;
+  overflow-wrap: anywhere;
+}
+
+.form {
+  border: 1px solid #d8d2e1;
+  background-color: #fff;
+}
+
+.fields {
+  min-width: 0;
+  display: grid;
+  gap: 28px;
+  margin: 0;
+  padding: 32px;
+  border: 0;
+}
+
+.field {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.field > span,
+.fieldLabel,
+.ageField legend {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.field .fieldError,
+.fieldError,
+.serverError {
+  margin: 0;
+  color: #9b2f3c;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.input[aria-invalid="true"],
+.relationSelect:has(input[aria-invalid="true"]) .selectControl {
+  border-color: #9b2f3c;
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #d8d2e1;
+  border-radius: 0;
+  background-color: #fff;
+  color: #14101b;
+  color-scheme: light;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.input:focus {
+  border-color: #0a33d9;
+  outline: 2px solid rgb(10 51 217 / 16%);
+  outline-offset: 1px;
+}
+
+.description {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.relationFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.relationSelect {
+  min-width: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.relationSelect .selectControl {
+  min-height: 50px;
+  border: 1px solid #d8d2e1;
+  background-color: #fff;
+  cursor: text;
+}
+
+.selectControl:hover {
+  border-color: #6b6375;
+}
+
+.selectControl.selectFocused {
+  border-color: #0a33d9;
+  box-shadow: 0 0 0 2px rgb(10 51 217 / 16%);
+}
+
+.selectValueContainer {
+  padding: 10px 14px;
+}
+
+.selectInput {
+  margin: 0;
+  padding: 0;
+  color: #14101b;
+  color-scheme: light;
+}
+
+.selectSingleValue {
+  color: #14101b;
+}
+
+.selectPlaceholder,
+.selectIndicator {
+  color: #6b6375;
+}
+
+.selectIndicator {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.relationSelect .selectMenu {
+  z-index: 2;
+  margin: 6px 0;
+  border: 1px solid #d8d2e1;
+  background-color: #fff;
+  box-shadow: 0 8px 24px rgb(20 16 27 / 10%);
+}
+
+.selectMenuList {
+  padding: 4px;
+}
+
+.relationSelect .selectOption {
+  padding: 10px;
+  color: #14101b;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.focusedOption {
+  background-color: #f0f3ff;
+}
+
+.relationSelect .selectOption.selectedOption {
+  background-color: #14101b;
+  color: #fff;
+}
+
+.selectMessage {
+  padding: 12px;
+  color: #6b6375;
+  font-size: 14px;
+}
+
+.optionsError {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #9b2f3c;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.numberFields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.ageField {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ageField legend {
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.ageOptions {
+  display: flex;
+}
+
+.ageOption {
+  position: relative;
+  flex: 1;
+  max-width: 160px;
+  cursor: pointer;
+}
+
+.radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.ageOption span {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d8d2e1;
+  background-color: #fff;
+  color: #6b6375;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ageOption + .ageOption {
+  margin-left: -1px;
+}
+
+.ageOption:hover span {
+  background-color: #f8f7fb;
+}
+
+.radio:checked + span {
+  border-color: #14101b;
+  background-color: #14101b;
+  color: #fff;
+}
+
+.radio:focus-visible + span {
+  position: relative;
+  outline: 2px solid #0a33d9;
+  outline-offset: 3px;
+  z-index: 1;
+}
+
+.formFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 32px;
+  border-top: 1px solid #d8d2e1;
+}
+
+.note {
+  margin: 0;
+  color: #6b6375;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.cancelButton,
+.saveButton {
+  min-width: 100px;
+  min-height: 46px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: 1px solid #14101b;
+  border-radius: 0;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cancelButton {
+  background-color: #fff;
+  color: #14101b;
+  cursor: pointer;
+}
+
+.cancelButton:hover:not(:disabled) {
+  border-color: #0a33d9;
+  color: #0a33d9;
+}
+
+.saveButton {
+  background-color: #14101b;
+  color: #fff;
+}
+
+.saveButton:hover:not(:disabled) {
+  background-color: #183c59;
+  border-color: #183c59;
+  cursor: pointer;
+}
+
+.saveButton:disabled,
+.cancelButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+.backLink:focus-visible,
+.cancelButton:focus-visible {
+  outline: 2px solid #0a33d9;
+  outline-offset: 4px;
+}
+
+.state {
+  min-height: 280px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 32px 20px;
+  color: #6b6375;
+  text-align: center;
+}
+
+.state h2 {
+  margin: 0;
+  color: #14101b;
+}
+
+@media (max-width: 600px) {
+  .page {
+    width: calc(100% - 28px);
+    padding-top: 30px;
+  }
+
+  .fields {
+    gap: 24px;
+    padding: 24px 20px;
+  }
+
+  .numberFields {
+    grid-template-columns: 1fr;
+  }
+
+  .relationFields {
+    gap: 12px;
+  }
+
+  .selectValueContainer {
+    padding-right: 8px;
+    padding-left: 10px;
+  }
+
+  .selectIndicator {
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+
+  .formFooter {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 24px 20px;
+  }
+
+  .cancelButton,
+  .saveButton {
+    flex: 1;
+  }
+}

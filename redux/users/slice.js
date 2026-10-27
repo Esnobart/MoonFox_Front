@@ -4,12 +4,15 @@ import {
     signIn,
     logOut,
     refreshUser,
+    refreshBasket,
     addProductToWishlist,
     removeProductFromWishlist,
     addProductToBasket,
     updateBasketProductQuantity,
     removeProductFromBasket
-} from "./operations"
+} from "./operations.js"
+
+import { productUpdated } from "../products/slice.js";
 
 const createEmptyUser = () => ({
     _id: null,
@@ -49,6 +52,13 @@ const usersSlice = createSlice({
         state.isLogged = false;
         state.user = action.payload.user ?? state.user;
     })
+    .addCase(productUpdated, (state, { payload }) => {
+        state.user.wishlist = (state.user.wishlist || []).map((product) => product?._id === payload._id ? payload : product);
+        state.user.basket = (state.user.basket || []).map((item) => item.product?._id === payload._id ? { ...item, product: payload } : item);
+    })
+    .addCase(refreshBasket.pending, setUserActionPending)
+    .addCase(refreshBasket.fulfilled, updateUserFromPayload)
+    .addCase(refreshBasket.rejected, setUserActionRejected)
     .addCase(signIn.pending, state => {
         state.userLoading = true;
     })

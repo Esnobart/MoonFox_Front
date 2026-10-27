@@ -37,6 +37,7 @@ export const addGuestBasketProduct = (product, quantity) => {
     index === productIndex
       ? {
           ...item,
+          product,
           quantity: Math.min(item.quantity + quantity, maxQuantity),
         }
       : item,
@@ -56,3 +57,29 @@ export const removeGuestBasketProduct = (productId) =>
   saveGuestBasket(
     getGuestBasket().filter((item) => item.product._id !== productId),
   );
+
+// Keep quantities and edits made while the catalogue requests are in flight.
+export const refreshGuestBasketProducts = async (fetchProduct) => {
+  const results = await Promise.all(getGuestBasket().map(async ({ product }) => {
+    try { return [product._id, await fetchProduct(product._id)]; }
+    catch { return [product._id, undefined]; }
+  }));
+  const products = new Map(results);
+  const latest = getGuestBasket();
+  const updated = latest
+    .filter((item) => products.get(item.product._id) !== null)
+    .map((item) => products.get(item.product._id)
+      ? { ...item, product: products.get(item.product._id) }
+      : item);
+  return saveGuestBasket(updated);
+};
+
+export const updateGuestBasketProduct = (product) => {
+  const basket = getGuestBasket();
+  if (!basket.some((item) => item.product._id === product._id)) return;
+  try {
+    saveGuestBasket(basket.map((item) => item.product._id === product._id ? { ...item, product } : item));
+  } catch {
+    // A storage restriction must not report an already saved product as a failure.
+  }
+};

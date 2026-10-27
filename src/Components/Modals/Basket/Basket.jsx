@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 import {
   addProductToBasket,
+  refreshBasket,
   removeProductFromBasket,
   updateBasketProductQuantity,
 } from "../../../../redux/users/operations.js";
@@ -17,10 +18,12 @@ import {
 import {
   GUEST_BASKET_EVENT,
   getGuestBasket,
+  refreshGuestBasketProducts,
   removeGuestBasketProduct,
   saveGuestBasket,
   updateGuestBasketQuantity,
 } from "../../../utils/guestBasket.js";
+import api from "../../../../redux/api.js";
 import css from "./Basket.module.css";
 
 const formatPrice = (price) => `$${Number(price || 0).toFixed(2)}`;
@@ -124,7 +127,20 @@ function Basket() {
   };
 
   return (
-    <Dialog.Root>
+    <Dialog.Root onOpenChange={(open) => {
+      if (!open) return;
+      if (isLogged) {
+        dispatch(refreshBasket());
+      } else {
+        refreshGuestBasketProducts(async (id) => {
+          try { return (await api.get('products/' + encodeURIComponent(id))).data; }
+          catch (error) {
+            if (error.response?.status === 404) return null;
+            throw error;
+          }
+        }).catch(() => toast.error("Could not refresh basket details."));
+      }
+    }}>
       <Dialog.Trigger asChild>
         <button
           type="button"
@@ -187,7 +203,7 @@ function Basket() {
                           className={css.imageLink}
                         >
                           <img
-                            src={item.product.img}
+                            src={item.product.images?.[0] || "/images/product-placeholder.svg"}
                             alt={item.product.name}
                             className={css.productImage}
                           />

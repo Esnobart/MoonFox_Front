@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import api from "../api";
+import api from "../api.js";
 
 export const signUp = createAsyncThunk(
     "users/signup",
@@ -49,6 +49,18 @@ export const refreshUser = createAsyncThunk(
         }
     }
 )
+
+export const refreshBasket = createAsyncThunk(
+    "users/refreshBasket",
+    async (_, thunkAPI) => {
+        try {
+            const response = await api.get('users/current', { signal: thunkAPI.signal });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+        }
+    }
+);
 
 export const requestNewPassword = createAsyncThunk(
     "users/requestNewPassword",

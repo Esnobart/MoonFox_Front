@@ -53,7 +53,7 @@ function ProductCard({ product, location }) {
         className={css.productImageLink}
       >
         <img
-          src={product.img}
+          src={product.images?.[0] || "/images/product-placeholder.svg"}
           alt={product.name}
           className={css.productImage}
         />

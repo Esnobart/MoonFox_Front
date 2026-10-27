@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { fetchProductById } from "../../../redux/products/operations.js";
 import {
   fetchedTempProduct,
-  productsLoading,
-  productsRejected,
+  productLoading,
+  productRejected,
 } from "../../../redux/products/selectors.js";
 import { clearTempProduct } from "../../../redux/products/slice.js";
 import {
@@ -17,7 +17,9 @@ import {
   removeProductFromWishlist,
 } from "../../../redux/users/operations.js";
 import {
+  isRefreshing,
   isUserLogged,
+  userData,
   userLoading,
   userWishlist,
 } from "../../../redux/users/selectors.js";
@@ -38,10 +40,19 @@ function ProductPage() {
     productId: null,
     value: 1,
   });
+  const [photoState, setPhotoState] = useState({ productId: null, url: null });
   const product = useSelector(fetchedTempProduct);
-  const isLoading = useSelector(productsLoading);
-  const isRejected = useSelector(productsRejected);
+  const images = product?.images ?? [];
+  const activePhoto =
+    photoState.productId === productId && images.includes(photoState.url)
+      ? photoState.url
+      : images[0];
+  const isLoading = useSelector(productLoading);
+  const isRejected = useSelector(productRejected);
   const isLogged = useSelector(isUserLogged);
+  const user = useSelector(userData);
+  const authIsRefreshing = useSelector(isRefreshing);
+  const isAdmin = isLogged && !authIsRefreshing && user.role === "Admin";
   const isUserActionLoading = useSelector(userLoading);
   const wishlist = useSelector(userWishlist);
   const quantity =
@@ -110,9 +121,10 @@ function ProductPage() {
   };
 
   useEffect(() => {
-    dispatch(fetchProductById(productId));
+    const request = dispatch(fetchProductById(productId));
 
     return () => {
+      request.abort();
       dispatch(clearTempProduct());
     };
   }, [dispatch, productId]);
@@ -125,13 +137,23 @@ function ProductPage() {
         </title>
       </Helmet>
 
-      <button
-        type="button"
-        className={css.backButton}
-        onClick={handleBack}
-      >
-        Back
-      </button>
+      <div className={css.toolbar}>
+        <button
+          type="button"
+          className={css.backButton}
+          onClick={handleBack}
+        >
+          Back
+        </button>
+        {isAdmin && product && !isLoading && !isRejected && (
+          <Link
+            to={`/products/${product._id}/edit`}
+            className={css.editLink}
+          >
+            Edit product
+          </Link>
+        )}
+      </div>
 
       {isLoading && (
         <div className={css.stateBlock}>
@@ -192,9 +214,25 @@ function ProductPage() {
           <div className={css.imageStage}>
             <img
               className={css.productImage}
-              src={product.img}
-              alt={product.name}
+              src={activePhoto || "/images/product-placeholder.svg"}
+              alt={activePhoto ? product.name : product.name + ": no photo"}
             />
+            {images.length > 1 && (
+              <div className={css.thumbnails} role="group" aria-label="Product photos">
+                {images.map((url, index) => (
+                  <button
+                    key={url + "-" + index}
+                    type="button"
+                    className={css.thumbnailButton}
+                    aria-label={"Show photo " + (index + 1)}
+                    aria-pressed={activePhoto === url}
+                    onClick={() => setPhotoState({ productId, url })}
+                  >
+                    <img src={url} alt="" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <aside className={css.buyPanel}>
