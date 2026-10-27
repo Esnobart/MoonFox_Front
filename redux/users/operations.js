@@ -50,6 +50,30 @@ export const refreshUser = createAsyncThunk(
     }
 )
 
+export const updateProfile = createAsyncThunk(
+    "users/updateProfile",
+    async ({ username, avatar }, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().users.user._id;
+            const body = new FormData();
+            if (username !== undefined) body.append("username", username.trim());
+            if (avatar) body.append("avatar", avatar, avatar.name);
+
+            const response = await api.patch('users/current', body, { signal: thunkAPI.signal });
+            const user = response.data?.user;
+
+            if (user?._id !== userId || typeof user?.username !== "string" ||
+                !user.username.trim() || !(user.avatar === null || typeof user.avatar === "string")) {
+                return thunkAPI.rejectWithValue("Could not save your profile. Please try again.");
+            }
+
+            return response.data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+)
+
 export const refreshBasket = createAsyncThunk(
     "users/refreshBasket",
     async (_, thunkAPI) => {
@@ -66,7 +90,7 @@ export const requestNewPassword = createAsyncThunk(
     "users/requestNewPassword",
     async (data, thunkAPI) => {
         try {
-            const responce = await api.post('users/forgot-password', data);
+            const responce = await api.post('users/forgot-password', data, { signal: thunkAPI.signal });
             return responce.data
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);

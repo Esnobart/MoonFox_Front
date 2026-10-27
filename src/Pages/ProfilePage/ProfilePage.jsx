@@ -185,13 +185,28 @@ function ProfilePage() {
 
       <header className={css.profileHeader}>
         <div className={css.profileIdentity}>
-          <div className={css.avatar}>
-            {profile.avatar ? (
-              <img src={profile.avatar} alt={`${profile.username} avatar`} />
-            ) : (
-              <span aria-hidden="true">{initial}</span>
-            )}
-          </div>
+          {isOwnProfile ? (
+            <Link
+              to={`/profile/${encodeURIComponent(currentUser.username)}/edit`}
+              className={`${css.avatar} ${css.editableAvatar}`}
+              aria-label="Edit profile avatar"
+            >
+              {profile.avatar ? (
+                <img src={profile.avatar} alt={`${profile.username} avatar`} />
+              ) : (
+                <span aria-hidden="true">{initial}</span>
+              )}
+              <span className={css.avatarOverlay} aria-hidden="true">Edit</span>
+            </Link>
+          ) : (
+            <div className={css.avatar}>
+              {profile.avatar ? (
+                <img src={profile.avatar} alt={`${profile.username} avatar`} />
+              ) : (
+                <span aria-hidden="true">{initial}</span>
+              )}
+            </div>
+          )}
 
           <div className={css.identity}>
             <p className={css.role}>{displayRole}</p>
@@ -204,6 +219,12 @@ function ProfilePage() {
 
         {isOwnProfile && (
           <div className={css.profileActions}>
+            <Link
+              to={`/profile/${encodeURIComponent(currentUser.username)}/edit`}
+              className={css.outlineButton}
+            >
+              Edit profile
+            </Link>
             {isCreator && <ProductSubmissionModal />}
             {isAdmin && (
               <Link

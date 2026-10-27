@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProducts, fetchProductById } from "./operations.js";
+import { fetchProducts, fetchProductById, updateProduct } from "./operations.js";
 
 const productsSlice = createSlice({
   name: "products",
@@ -20,17 +20,17 @@ const productsSlice = createSlice({
       state.productLoading = false;
       state.productRejected = false;
     },
-    productUpdated: (state, { payload }) => {
-      state.products = state.products.map((product) => product._id === payload._id ? payload : product);
-      if (state.tempProduct?._id === payload._id) state.tempProduct = payload;
-      // Discard catalogue responses started before this save.
-      state.listRequestId = null;
-      state.loading = false;
-      state.rejected = false;
-    },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        const product = action.payload.product;
+        state.products = state.products.map((item) => item._id === product._id ? product : item);
+        if (state.tempProduct?._id === product._id) state.tempProduct = product;
+        state.listRequestId = null;
+        state.loading = false;
+        state.rejected = false;
+      })
       .addCase(fetchProducts.pending, (state, action) => {
         state.listRequestId = action.meta.requestId;
         state.loading = true;
@@ -69,5 +69,5 @@ const productsSlice = createSlice({
   },
 });
 
-export const { clearTempProduct, productUpdated } = productsSlice.actions;
+export const { clearTempProduct } = productsSlice.actions;
 export const productsReducer = productsSlice.reducer;

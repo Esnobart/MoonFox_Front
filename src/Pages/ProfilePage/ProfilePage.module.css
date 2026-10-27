@@ -63,6 +63,40 @@
   object-fit: cover;
 }
 
+.editableAvatar {
+  position: relative;
+  text-decoration: none;
+}
+
+.avatarOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(20 16 27 / 55%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.editableAvatar:hover .avatarOverlay,
+.editableAvatar:focus-visible .avatarOverlay {
+  opacity: 1;
+}
+
+.editableAvatar:focus-visible {
+  outline: 2px solid #0a33d9;
+  outline-offset: 4px;
+}
+
+@media (hover: none) {
+  .avatarOverlay {
+    opacity: 1;
+  }
+}
+
 .identity {
   min-width: 0;
 }

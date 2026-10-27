@@ -15,6 +15,9 @@ const EditProductPage = lazy(() =>
   import("./Pages/EditProductPage/EditProductPage.jsx"),
 );
 const ProfilePage = lazy(() => import("./Pages/ProfilePage/ProfilePage.jsx"));
+const EditProfilePage = lazy(() =>
+  import("./Pages/EditProfilePage/EditProfilePage.jsx"),
+);
 const AdminSubmissionsPage = lazy(() =>
   import("./Pages/AdminSubmissionsPage/AdminSubmissionsPage.jsx"),
 );
@@ -87,6 +90,7 @@ function App() {
               element={<EditProductPage />}
             />
             <Route path="/profile/:username" element={<ProfilePage />} />
+            <Route path="/profile/:username/edit" element={<EditProfilePage />} />
             <Route
               path="/admin/submissions"
               element={<AdminSubmissionsPage />}

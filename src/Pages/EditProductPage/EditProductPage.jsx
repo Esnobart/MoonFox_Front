@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,20 +9,20 @@ import { toast } from "react-toastify";
 import {
   fetchProductById,
   fetchProducts,
+  updateProduct,
 } from "../../../redux/products/operations.js";
 import {
   fetchedAuthors,
   fetchedCollections,
   fetchedTempProduct,
 } from "../../../redux/products/selectors.js";
-import { clearTempProduct, productUpdated } from "../../../redux/products/slice.js";
+import { clearTempProduct } from "../../../redux/products/slice.js";
 import {
   isRefreshing,
   isUserLogged,
   userData,
 } from "../../../redux/users/selectors.js";
 import ImageUploadField from "../../Components/ImageUploadField/ImageUploadField.jsx";
-import { updateProduct } from "../../api/products.js";
 import { updateGuestBasketProduct } from "../../utils/guestBasket.js";
 import css from "./EditProductPage.module.css";
 
@@ -57,7 +57,6 @@ const getProductImages = (product) =>
 function ProductEditForm({ product, optionsRejected }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const saveRequest = useRef(null);
   const authors = useSelector(fetchedAuthors);
   const collections = useSelector(fetchedCollections);
   const relationFields = [
@@ -101,53 +100,33 @@ function ProductEditForm({ product, optionsRejected }) {
     },
   });
 
-  useEffect(() => () => saveRequest.current?.abort(), []);
-
-  const handleSave = async (values) => {
-    if (saveRequest.current) return;
-
+  const onSubmit = async (values) => {
     clearErrors("root.server");
-    const controller = new AbortController();
-    saveRequest.current = controller;
 
     try {
-      const { product: savedProduct } = await updateProduct(product._id, values, {
-        signal: controller.signal,
-        version: product.__v ?? 0,
-      });
-      if (controller.signal.aborted) return;
+      const { product: savedProduct } = await dispatch(
+        updateProduct({
+          productId: product._id,
+          values,
+          version: product.__v ?? 0,
+        }),
+      ).unwrap();
 
-      dispatch(productUpdated(savedProduct));
       updateGuestBasketProduct(savedProduct);
       toast.success("Product updated.");
       navigate(`/products/${product._id}`, { replace: true });
-    } catch (error) {
-      if (controller.signal.aborted) return;
-
-      const message = error.response?.data?.message;
+    } catch (err) {
       setError("root.server", {
         type: "server",
-        message:
-          typeof message === "string" && message.trim()
-            ? message
-            : "Could not save this product. Please try again.",
+        message: err,
       });
-    } finally {
-      if (saveRequest.current === controller) saveRequest.current = null;
     }
   };
 
   return (
     <form
       className={css.form}
-      onSubmit={(event) => {
-        if (saveRequest.current) {
-          event.preventDefault();
-          return;
-        }
-
-        return handleSubmit(handleSave)(event);
-      }}
+      onSubmit={handleSubmit(onSubmit)}
       aria-busy={isSubmitting}
       noValidate
     >

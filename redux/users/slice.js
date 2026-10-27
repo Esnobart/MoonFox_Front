@@ -4,6 +4,7 @@ import {
     signIn,
     logOut,
     refreshUser,
+    updateProfile,
     refreshBasket,
     addProductToWishlist,
     removeProductFromWishlist,
@@ -12,7 +13,7 @@ import {
     removeProductFromBasket
 } from "./operations.js"
 
-import { productUpdated } from "../products/slice.js";
+import { updateProduct } from "../products/operations.js";
 
 const createEmptyUser = () => ({
     _id: null,
@@ -52,9 +53,18 @@ const usersSlice = createSlice({
         state.isLogged = false;
         state.user = action.payload.user ?? state.user;
     })
-    .addCase(productUpdated, (state, { payload }) => {
-        state.user.wishlist = (state.user.wishlist || []).map((product) => product?._id === payload._id ? payload : product);
-        state.user.basket = (state.user.basket || []).map((item) => item.product?._id === payload._id ? { ...item, product: payload } : item);
+    .addCase(updateProduct.fulfilled, (state, action) => {
+        const product = action.payload.product;
+        state.user.wishlist = (state.user.wishlist || []).map((item) => item?._id === product._id ? product : item);
+        state.user.basket = (state.user.basket || []).map((item) => item.product?._id === product._id ? { ...item, product } : item);
+    })
+    .addCase(updateProfile.pending, setUserActionPending)
+    .addCase(updateProfile.rejected, setUserActionRejected)
+    .addCase(updateProfile.fulfilled, (state, action) => {
+        state.userLoading = false;
+        if (action.payload.user._id !== state.user._id) return;
+        state.user.username = action.payload.user.username;
+        state.user.avatar = action.payload.user.avatar;
     })
     .addCase(refreshBasket.pending, setUserActionPending)
     .addCase(refreshBasket.fulfilled, updateUserFromPayload)
