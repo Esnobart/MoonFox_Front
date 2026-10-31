@@ -15,7 +15,7 @@ const legalLinks = ["Privacy", "Terms"];
 
 const socialLinks = [
   {
-    href: "https://www.instagram.com/moonfox.art/",
+    href: "https://www.instagram.com/moonfoxtailshop/",
     icon: "/icons/instagram.svg",
     label: "Instagram",
   },
@@ -25,7 +25,7 @@ const socialLinks = [
     label: "Facebook",
   },
   {
-    href: "https://www.twitter.com/moonfox.art",
+    href: "https://x.com/MoonFoxTail",
     icon: "/icons/twitter.svg",
     label: "Twitter",
   },
