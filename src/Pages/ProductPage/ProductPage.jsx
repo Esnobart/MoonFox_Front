@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { fetchProductById } from "../../../redux/products/operations.js";
 import {
   fetchedTempProduct,
+  getProductType,
   productLoading,
   productRejected,
 } from "../../../redux/products/selectors.js";
@@ -186,6 +187,15 @@ function ProductPage() {
             <h1 className={css.title}>{product.name}</h1>
 
             <div className={css.metaList}>
+              <Link
+                to={"/catalog?" + new URLSearchParams({ productType: getProductType(product) })}
+                state={{ from: location }}
+                className={css.metaItem}
+              >
+                <span>Product type</span>
+                <strong>{getProductType(product)}</strong>
+              </Link>
+
               <Link
                 to={`/profile/${encodeURIComponent(product.author.username)}`}
                 state={{ from: location }}

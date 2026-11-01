@@ -15,6 +15,8 @@ import {
   fetchedAuthors,
   fetchedCollections,
   fetchedTempProduct,
+  getProductType,
+  PRODUCT_TYPES,
 } from "../../../redux/products/selectors.js";
 import { clearTempProduct } from "../../../redux/products/slice.js";
 import {
@@ -97,6 +99,7 @@ function ProductEditForm({ product, optionsRejected }) {
       inStock: product.inStock ?? 0,
       popular: product.popular ?? 0,
       ageRestriction: product.ageRestriction ?? "None",
+      type: getProductType(product),
     },
   });
 
@@ -151,6 +154,28 @@ function ProductEditForm({ product, optionsRejected }) {
             <span id="product-name-error" className={css.fieldError} role="alert">
               {errors.name.message}
             </span>
+          )}
+        </div>
+
+        <div className={css.field}>
+          <label htmlFor="product-type" className={css.fieldLabel}>Product type</label>
+          <select
+            id="product-type"
+            className={css.input}
+            aria-invalid={Boolean(errors.type)}
+            aria-describedby={errors.type ? "product-type-error" : undefined}
+            {...register("type", {
+              validate: (value) => PRODUCT_TYPES.includes(value) || "Choose a product type.",
+            })}
+          >
+            {PRODUCT_TYPES.map((type) => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+          {errors.type && (
+            <p id="product-type-error" className={css.fieldError} role="alert">
+              {errors.type.message}
+            </p>
           )}
         </div>
 

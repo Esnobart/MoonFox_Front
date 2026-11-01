@@ -20,11 +20,6 @@ const socialLinks = [
     label: "Instagram",
   },
   {
-    href: "https://www.facebook.com/moonfox.art",
-    icon: "/icons/facebook.svg",
-    label: "Facebook",
-  },
-  {
     href: "https://x.com/MoonFoxTail",
     icon: "/icons/twitter.svg",
     label: "Twitter",

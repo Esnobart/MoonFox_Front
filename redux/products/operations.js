@@ -51,6 +51,7 @@ export const updateProduct = createAsyncThunk(
                 inStock: values.inStock,
                 popular: values.popular,
                 ageRestriction: values.ageRestriction,
+                type: values.type,
                 images,
             }));
             newImages.forEach((file) => body.append("newImages", file, file.name));

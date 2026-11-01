@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 import AuthModal from "../Modals/Auth/AuthModal.jsx";
 import Basket from "../Modals/Basket/Basket.jsx";
@@ -24,6 +24,29 @@ function Header({ resetToken, onResetPasswordSuccess }) {
           Moon<span className={css.headerText}>Fox</span>
         </h1>
       </Link>
+
+      <nav className={css.headerLinks} aria-label="Main navigation">
+        <NavLink to="/" end state={{ from: location }} className={css.headerLink}>
+          Home
+        </NavLink>
+        <NavLink
+          to="/catalog"
+          state={{ from: location }}
+          className={css.headerLink}
+        >
+          Catalog
+        </NavLink>
+        <NavLink to="/about" state={{ from: location }} className={css.headerLink}>
+          About
+        </NavLink>
+        <NavLink
+          to="/contact"
+          state={{ from: location }}
+          className={css.headerLink}
+        >
+          Contact
+        </NavLink>
+      </nav>
 
       <div className={css.headerButtons}>
         {authIsRefreshing && !resetToken ? (
