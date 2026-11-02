@@ -67,12 +67,8 @@ function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
           )}
 
           <Dialog.Close asChild>
-            <button
-              type="button"
-              className={css.close}
-              aria-label="Close modal"
-            >
-              x
+            <button type="button" className={css.close} aria-label="Close">
+              <span aria-hidden="true">&times;</span>
             </button>
           </Dialog.Close>
         </Dialog.Content>
