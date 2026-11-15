@@ -24,11 +24,11 @@ const socialLinks = [
     icon: "/icons/twitter.svg",
     label: "Twitter",
   },
-  {
-    href: "https://www.tiktok.com/@moonfox.art",
-    icon: "/icons/tiktok.svg",
-    label: "TikTok",
-  },
+  // {
+  //   href: "https://www.tiktok.com/@moonfox.art",
+  //   icon: "/icons/tiktok.svg",
+  //   label: "TikTok",
+  // },
 ];
 
 function Footer() {
