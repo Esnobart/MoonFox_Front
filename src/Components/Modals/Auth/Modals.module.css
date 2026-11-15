@@ -47,11 +47,14 @@
     color: #756d7e;
 }
 
-.xAuthForm {
+.socialAuthButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     margin-top: 20px;
 }
 
-.xAuthButton {
+.socialAuthButton {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -60,29 +63,46 @@
     width: 100%;
     min-height: 44px;
     padding: 10px 20px;
-    border: 1px solid #14101b;
+    border: 1px solid;
     border-radius: 25px;
-    background-color: #14101b;
-    color: #fff;
     font: inherit;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 160ms ease;
 }
 
+.xAuthButton {
+    border-color: #14101b;
+    background-color: #14101b;
+    color: #fff;
+}
+
 .xAuthButton:hover {
     background-color: #302b37;
 }
 
-.xAuthButton:focus-visible {
+.googleAuthButton {
+    border-color: #747775;
+    background-color: #fff;
+    color: #1f1f1f;
+}
+
+.googleAuthButton:hover {
+    background-color: #f2f2f2;
+}
+
+.socialAuthButton:focus-visible {
     outline: 3px solid #0a33d9;
     outline-offset: 3px;
 }
 
-.xAuthIcon {
-    width: 18px;
-    height: 18px;
+.socialAuthIcon {
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
+}
+
+.xAuthButton .socialAuthIcon {
     filter: brightness(0) invert(1);
 }
 

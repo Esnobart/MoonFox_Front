@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 
 import css from "./Modals.module.css";
 import { signIn } from "../../../../redux/users/operations";
-import XAuthButton from "./XAuthButton.jsx";
+import SocialAuthButtons from "./SocialAuthButtons.jsx";
 
 function LoginForm({ onLoginSuccess, onSignupClick, onForgotPasswordClick }) {
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ function LoginForm({ onLoginSuccess, onSignupClick, onForgotPasswordClick }) {
         Enter your account details
       </Dialog.Description>
 
-      <XAuthButton>Sign in with X</XAuthButton>
+      <SocialAuthButtons />
 
       <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
         <input
