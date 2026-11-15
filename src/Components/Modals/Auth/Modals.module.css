@@ -47,6 +47,62 @@
     color: #756d7e;
 }
 
+.xAuthForm {
+    margin-top: 20px;
+}
+
+.xAuthButton {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 20px;
+    border: 1px solid #14101b;
+    border-radius: 25px;
+    background-color: #14101b;
+    color: #fff;
+    font: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 160ms ease;
+}
+
+.xAuthButton:hover {
+    background-color: #302b37;
+}
+
+.xAuthButton:focus-visible {
+    outline: 3px solid #0a33d9;
+    outline-offset: 3px;
+}
+
+.xAuthIcon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+.authDivider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    color: #756d7e;
+    font-size: 14px;
+}
+
+.authDivider::before,
+.authDivider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #d8d2e1;
+}
+
 .form {
     margin: 16px 0px;
     display: flex;

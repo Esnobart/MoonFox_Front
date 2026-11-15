@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 import css from "./Modals.module.css";
 import { signUp } from "../../../../redux/users/operations";
+import XAuthButton from "./XAuthButton.jsx";
 
 function SignupForm({ onLoginClick }) {
   const dispatch = useDispatch();
@@ -45,6 +46,8 @@ function SignupForm({ onLoginClick }) {
       <Dialog.Description className={css.description}>
         Create a new account
       </Dialog.Description>
+
+      <XAuthButton>Sign up with X</XAuthButton>
 
       <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
         <input
