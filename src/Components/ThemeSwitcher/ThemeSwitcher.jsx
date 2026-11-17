@@ -7,16 +7,47 @@ const options = [
   { value: "system", label: "System", description: "Follow your device" },
   { value: "light", label: "Light", description: "A brighter appearance" },
   { value: "dark", label: "Dark", description: "Easy on the eyes" },
-  { value: "schedule", label: "Scheduled", description: "Light from 07:00 to 19:00" },
+  {
+    value: "schedule",
+    label: "Scheduled",
+    description: "Light from 07:00 to 19:00",
+  },
 ];
 
 function ThemeIcon({ mode }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {mode === "system" && <><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8m-4-4v4" /></>}
-      {mode === "light" && <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></>}
-      {mode === "dark" && <path d="M20.5 13a8.5 8.5 0 0 1-9.5-9.5A8.5 8.5 0 1 0 20.5 13Z" />}
-      {mode === "schedule" && <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>}
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {mode === "system" && (
+        <>
+          <rect x="3" y="4" width="18" height="12" rx="2" />
+          <path d="M8 20h8m-4-4v4" />
+        </>
+      )}
+      {mode === "light" && (
+        <>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+        </>
+      )}
+      {mode === "dark" && (
+        <path d="M20.5 13a8.5 8.5 0 0 1-9.5-9.5A8.5 8.5 0 1 0 20.5 13Z" />
+      )}
+      {mode === "schedule" && (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" />
+        </>
+      )}
     </svg>
   );
 }
@@ -58,7 +89,12 @@ export default function ThemeSwitcher() {
       ref={rootRef}
       onKeyDown={handleKeyDown}
       onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+        if (
+          event.relatedTarget &&
+          !event.currentTarget.contains(event.relatedTarget)
+        ) {
+          setOpen(false);
+        }
       }}
     >
       <button
@@ -87,12 +123,16 @@ export default function ThemeSwitcher() {
                   checked={preference === option.value}
                   onChange={() => setPreference(option.value)}
                 />
-                <span className={css.optionIcon}><ThemeIcon mode={option.value} /></span>
+                <span className={css.optionIcon}>
+                  <ThemeIcon mode={option.value} />
+                </span>
                 <span className={css.optionText}>
                   <span className={css.label}>{option.label}</span>
                   <span className={css.description}>{option.description}</span>
                 </span>
-                <span className={css.check} aria-hidden="true">✓</span>
+                <span className={css.check} aria-hidden="true">
+                  ✓
+                </span>
               </label>
             ))}
           </fieldset>
