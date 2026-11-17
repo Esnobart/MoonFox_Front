@@ -1,10 +1,10 @@
 .triggerButton {
   min-height: 42px;
   padding: 0 18px;
-  border: 1px solid #17131f;
+  border: 1px solid var(--color-action);
   border-radius: 4px;
-  background: #17131f;
-  color: #fff;
+  background: var(--color-action);
+  color: var(--color-action-text);
   font: inherit;
   font-size: 14px;
   font-weight: 700;
@@ -15,11 +15,12 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgb(23 19 31 / 52%);
+  background: var(--color-overlay);
   animation: fadeIn 160ms ease-out;
 }
 
 .content {
+  box-sizing: border-box;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -31,15 +32,15 @@
   align-content: center;
   justify-items: start;
   border-radius: 6px;
-  background: #fff;
-  box-shadow: 0 24px 70px rgb(23 19 31 / 22%);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-modal);
   transform: translate(-50%, -50%);
   animation: appear 180ms ease-out;
 }
 
 .eyebrow {
   margin: 0;
-  color: #0a33d9;
+  color: var(--color-accent);
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
@@ -47,7 +48,7 @@
 
 .title {
   margin: 6px 40px 0 0;
-  color: #17131f;
+  color: var(--color-text);
   font-size: clamp(32px, 6vw, 48px);
   font-weight: 700;
   letter-spacing: 0;
@@ -63,7 +64,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #17131f;
+  color: var(--color-text);
   font: inherit;
   font-size: 28px;
   line-height: 1;
@@ -72,13 +73,14 @@
 
 .triggerButton:hover,
 .triggerButton:focus-visible {
-  background: #0a33d9;
-  border-color: #0a33d9;
+  background: var(--color-accent-solid);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
 }
 
 .closeButton:hover,
 .closeButton:focus-visible {
-  color: #0a33d9;
+  color: var(--color-accent);
 }
 
 @keyframes fadeIn {

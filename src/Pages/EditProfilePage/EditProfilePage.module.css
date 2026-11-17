@@ -2,19 +2,19 @@
   width: min(900px, calc(100% - 32px));
   margin: 0 auto;
   padding: 42px 0 72px;
-  color: #14101b;
+  color: var(--color-text);
 }
 
 .backLink {
   display: inline-block;
   padding-bottom: 3px;
   border-bottom: 1px solid currentColor;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   text-decoration: none;
 }
 
 .backLink:hover {
-  color: #14101b;
+  color: var(--color-text);
 }
 
 .header {
@@ -23,7 +23,7 @@
 
 .eyebrow {
   margin: 0 0 10px;
-  color: #0a33d9;
+  color: var(--color-accent);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -32,7 +32,7 @@
 
 .title {
   margin: 0;
-  color: #14101b;
+  color: var(--color-text);
   font-size: clamp(36px, 5vw, 56px);
   font-weight: 600;
   letter-spacing: 0;
@@ -46,8 +46,8 @@
 
 .form {
   min-width: 0;
-  border: 1px solid #d8d2e1;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .fields {
@@ -89,10 +89,10 @@
   width: 100%;
   min-height: 48px;
   padding: 12px 14px;
-  border: 1px solid #d8d2e1;
+  border: 1px solid var(--color-border);
   border-radius: 0;
-  background: #fff;
-  color: #14101b;
+  background: var(--color-surface);
+  color: var(--color-text);
   color-scheme: light;
   font: inherit;
   font-size: 16px;
@@ -100,13 +100,13 @@
 }
 
 .input:focus {
-  border-color: #0a33d9;
-  outline: 2px solid rgb(10 51 217 / 16%);
+  border-color: var(--color-accent);
+  outline: 2px solid var(--color-focus-ring);
   outline-offset: 1px;
 }
 
 .input[aria-invalid="true"] {
-  border-color: #9b2f3c;
+  border-color: var(--color-danger);
 }
 
 .email {
@@ -118,25 +118,25 @@
 .note,
 .error {
   margin: 0;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 13px;
   line-height: 1.6;
 }
 
 .error {
-  color: #9b2f3c;
+  color: var(--color-danger);
 }
 
 .sectionHeading h2 {
   margin: 0 0 8px;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 24px;
   letter-spacing: 0;
 }
 
 .sectionHeading p {
   margin: 0;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 14px;
 }
 
@@ -146,7 +146,7 @@
   justify-content: space-between;
   gap: 20px;
   padding: 24px 32px;
-  border-top: 1px solid #d8d2e1;
+  border-top: 1px solid var(--color-border);
 }
 
 .actions {
@@ -164,7 +164,7 @@
   justify-content: center;
   box-sizing: border-box;
   padding: 0 20px;
-  border: 1px solid #14101b;
+  border: 1px solid var(--color-text);
   border-radius: 0;
   font: inherit;
   font-size: 15px;
@@ -173,23 +173,23 @@
 }
 
 .cancelButton {
-  background: #fff;
-  color: #14101b;
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .cancelButton:hover:not(:disabled) {
-  border-color: #0a33d9;
-  color: #0a33d9;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .saveButton {
-  background: #14101b;
-  color: #fff;
+  background: var(--color-action);
+  color: var(--color-action-text);
 }
 
 .saveButton:hover:not(:disabled) {
-  border-color: #183c59;
-  background: #183c59;
+  border-color: var(--color-action-hover);
+  background: var(--color-action-hover);
 }
 
 .input:disabled,
@@ -202,7 +202,7 @@
 .backLink:focus-visible,
 .cancelButton:focus-visible,
 .saveButton:focus-visible {
-  outline: 2px solid #0a33d9;
+  outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
 
@@ -220,7 +220,7 @@
   display: grid;
   place-items: center;
   padding: 32px 20px;
-  color: #6b6375;
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 600px) {

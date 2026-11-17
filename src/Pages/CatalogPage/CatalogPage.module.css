@@ -14,7 +14,7 @@
 
 .eyebrow {
   margin: 0 0 8px;
-  color: #0a33d9;
+  color: var(--color-accent);
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -23,7 +23,7 @@
 
 .title {
   margin: 0;
-  color: #17131f;
+  color: var(--color-text);
   font-size: 42px;
   line-height: 1.1;
 }
@@ -31,7 +31,7 @@
 .intro {
   max-width: 600px;
   margin-top: 14px;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 15px;
   line-height: 1.6;
 }
@@ -39,7 +39,7 @@
 .backLink {
   display: inline-block;
   margin-bottom: 12px;
-  color: #0a33d9;
+  color: var(--color-accent);
   font-size: 14px;
   text-decoration: none;
 }
@@ -54,14 +54,14 @@
 
 .sectionHeading h2 {
   margin: 0;
-  color: #17131f;
+  color: var(--color-text);
   font-size: 26px;
   line-height: 1.2;
 }
 
 .sectionNote {
   flex-shrink: 0;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 12px;
 }
 
@@ -87,17 +87,17 @@
   padding: 24px;
   box-sizing: border-box;
   overflow: hidden;
-  border: 1px solid #183c59;
+  border: 1px solid var(--color-artist-bg);
   border-radius: 8px;
-  background: #183c59;
-  color: #fff;
+  background: var(--color-artist-bg);
+  color: var(--color-on-artwork);
   text-decoration: none;
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .catalogCard:hover {
-  border-color: #0a33d9;
-  box-shadow: 0 8px 22px rgb(23 19 31 / 8%);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-card);
   transform: translateY(-2px);
 }
 
@@ -129,8 +129,8 @@
   align-items: center;
   gap: 12px;
   border-radius: 4px;
-  background: #eaeefb;
-  color: #0a33d9;
+  background: var(--color-highlight);
+  color: var(--color-accent);
   font-size: 12px;
   line-height: 1.4;
   text-decoration: none;
@@ -152,11 +152,11 @@
 
 .filterChip:hover,
 .productType:hover {
-  background: #dce3fa;
+  background: var(--color-highlight-hover);
 }
 
 .page :focus-visible {
-  outline: 2px solid #0a33d9;
+  outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
 
@@ -175,10 +175,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid #e2ddeb;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 8px;
-  background-color: #fff;
-  color: #17131f;
+  background-color: var(--color-surface);
+  color: var(--color-text);
   text-decoration: none;
   transition:
     border-color 160ms ease,
@@ -187,8 +187,8 @@
 }
 
 .productCard:hover {
-  border-color: #0a33d9;
-  box-shadow: 0 12px 30px rgb(23 19 31 / 12%);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-card);
   transform: translateY(-2px);
 }
 
@@ -209,7 +209,7 @@
   aspect-ratio: 4 / 3;
   display: block;
   object-fit: cover;
-  background-color: #ece7f2;
+  background-color: var(--color-image-bg);
 }
 
 .productInfo {
@@ -223,7 +223,7 @@
 
 .productName {
   margin: 0;
-  color: #17131f;
+  color: var(--color-text);
   font-size: 17px;
   font-weight: 800;
   line-height: 1.25;
@@ -232,7 +232,7 @@
 
 .productNameLink:hover,
 .productMeta a:hover {
-  color: #0a33d9;
+  color: var(--color-accent);
 }
 
 .productMeta {
@@ -240,7 +240,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 13px;
   line-height: 1.25;
   text-align: right;
@@ -269,7 +269,7 @@
   gap: 24px;
   overflow: hidden;
   border-radius: 8px;
-  color: #fff;
+  color: var(--color-on-artwork);
   isolation: isolate;
   transition:
     box-shadow 180ms ease,
@@ -277,23 +277,23 @@
 }
 
 .groupBanner:hover {
-  box-shadow: 0 14px 32px rgb(23 19 31 / 18%);
+  box-shadow: var(--shadow-card);
   transform: translateY(-2px);
 }
 
 .authorBanner {
-  background-color: #183c59;
+  background-color: var(--color-artist-bg);
 }
 
 .collectionBanner {
-  background-color: #49304f;
+  background-color: var(--color-collection-cover);
 }
 
 .collectionBanner::after {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-color: rgb(23 19 31 / 56%);
+  background-color: var(--color-image-overlay);
   content: "";
 }
 
@@ -312,9 +312,9 @@
   width: 96px;
   height: 96px;
   flex: 0 0 96px;
-  border: 3px solid rgb(255 255 255 / 76%);
+  border: 3px solid var(--color-on-artwork-border);
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .groupAvatar {
@@ -325,7 +325,7 @@
 .groupAvatarFallback {
   display: grid;
   place-items: center;
-  color: #183c59;
+  color: var(--color-artist-text);
   font-size: 34px;
   font-weight: 800;
 }
@@ -337,7 +337,7 @@
 
 .groupHeading p {
   margin: 0 0 5px;
-  color: rgb(255 255 255 / 78%);
+  color: var(--color-on-artwork-muted);
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
@@ -345,7 +345,7 @@
 
 .groupHeading h2 {
   margin: 0;
-  color: #fff;
+  color: var(--color-on-artwork);
   font-size: 32px;
   line-height: 1.1;
   overflow-wrap: anywhere;
@@ -353,7 +353,7 @@
 
 .groupCount {
   flex: 0 0 auto;
-  color: rgb(255 255 255 / 84%);
+  color: var(--color-on-artwork-muted);
   font-size: 14px;
   font-weight: 700;
 }
@@ -367,7 +367,7 @@
   margin: 0;
   display: grid;
   place-items: center;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 15px;
   text-align: center;
 }
@@ -375,7 +375,7 @@
 .loadMoreTrigger {
   min-height: 48px;
   padding: 24px 0 0;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 14px;
   text-align: center;
 }

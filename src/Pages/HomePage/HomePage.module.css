@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
 
 .homePage {
-  background-color: #f8f7fb;
-  color: #14101b;
+  background-color: var(--color-page);
+  color: var(--color-text);
 }
 
 .collabSection,
@@ -31,7 +31,7 @@
 }
 
 .sectionTitle {
-  color: #14101b;
+  color: var(--color-text);
 }
 
 .scrollList {
@@ -93,7 +93,7 @@
   aspect-ratio: 1 / 1;
   display: block;
   object-fit: contain;
-  background-color: #fff;
+  background-color: var(--color-surface);
   transition: transform 180ms ease;
 }
 
@@ -111,7 +111,7 @@
 
 .productName {
   margin: 0 0 6px;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 26px;
   font-weight: 500;
   line-height: 1.1;
@@ -120,7 +120,7 @@
 .productMetaLink,
 .productInfo p {
   margin: 0;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 19px;
   line-height: 1.3;
   font-family: 'IBM Plex Sans Condensed', sans-serif;
@@ -128,7 +128,7 @@
 
 .productNameLink:hover,
 .productMetaLink:hover {
-  color: #0a33d9;
+  color: var(--color-accent);
 }
 
 .productInfo .productPrice {
@@ -154,7 +154,7 @@
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 18px;
   text-align: center;
 }
@@ -164,7 +164,7 @@
   aspect-ratio: 1 / 1;
   display: block;
   object-fit: cover;
-  background-color: #fff;
+  background-color: var(--color-surface);
   transition: transform 180ms ease;
 }
 
@@ -174,8 +174,8 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #183c59;
-  color: #fff;
+  background: var(--color-artist-bg);
+  color: var(--color-on-artwork);
   font-size: 38px;
   font-weight: 700;
   transition: transform 180ms ease;
@@ -190,7 +190,7 @@
 .viewAllLink {
   display: inline-flex;
   align-items: center;
-  color: #14101b;
+  color: var(--color-text);
   font-family: 'IBM Plex Sans Condensed', sans-serif;
   font-size: 16px;
   font-weight: 500;
@@ -273,9 +273,8 @@
 
 .section {
   padding: clamp(28px, 4vw, 64px) clamp(20px, 5vw, 96px) 28px;
-  color: #fff;
-  background: #171c26;
-  /* Previous background: linear-gradient(135deg, #183c59 0%, #2d6684 100%); */
+  color: var(--color-text);
+  background: var(--color-collection-section);
 }
 
 .inner {
@@ -290,10 +289,10 @@
   margin-bottom: 40px;
 }
 
-.sectionTitle {
+.section .sectionTitle {
   flex-shrink: 0;
   margin: 0;
-  color: #c7cbd3;
+  color: var(--color-text-secondary);
   font-family: 'IBM Plex Sans Condensed', sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -304,7 +303,7 @@
 .headerLine {
   height: 1px;
   flex: 1;
-  background: rgb(255 255 255 / 14%);
+  background: var(--color-border);
 }
 
 .board {
@@ -360,7 +359,7 @@
 .collectionTitle {
   position: relative;
   margin: 0 0 4px;
-  color: #fff;
+  color: var(--color-text);
   font-family: 'Alata', sans-serif;
   font-size: clamp(26px, 2.7vw, 46px);
   font-weight: 400;
@@ -390,15 +389,13 @@
   display: block;
   width: 100%;
   height: 100%;
-  border: 1px solid #171c26;
+  border: 1px solid var(--color-collection-section);
   box-sizing: border-box;
-  background: #fff;
+  background: var(--color-surface);
   transition: box-shadow 180ms ease;
 }
 
-/* .productLink:hover {
-  box-shadow: 0 12px 28px rgb(0 0 0 / 18%);
-} */
+
 
 .productImage {
   display: block;
@@ -414,7 +411,7 @@
   justify-content: center;
   gap: 18px;
   box-sizing: border-box;
-  color: #e2e5eb;
+  color: var(--color-text-body);
   font-family: 'IBM Plex Sans Condensed', sans-serif;
   font-size: 15px;
   line-height: 1.2;
@@ -429,20 +426,20 @@
   gap: 16px;
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid rgb(255 255 255 / 14%);
+  border-top: 1px solid var(--color-border);
 }
 
 .catalogLink {
   gap: 12px;
-  color: #c7cbd3;
+  color: var(--color-text-secondary);
 }
 
 .catalogLink:hover {
-  color: #fff;
+  color: var(--color-text);
 }
 
 .section :focus-visible {
-  outline: 2px solid #c3d8ff;
+  outline: 2px solid var(--color-accent);
   outline-offset: 6px;
 }
 

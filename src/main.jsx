@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import store from "../redux/store.js";
+import ThemeProvider from "./theme/ThemeProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -16,7 +17,9 @@ createRoot(document.getElementById("root")).render(
           <link rel="icon" type="image/png" href="/icons/logo3.png" />
           <title>MoonFox</title>
         </Helmet>
-        <App />
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
       </BrowserRouter>
     </Provider>
   </StrictMode>,

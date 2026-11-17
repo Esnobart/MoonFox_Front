@@ -7,6 +7,7 @@ import "./App.css";
 import Footer from "./Components/Footer/Footer.jsx";
 import Header from "./Components/Header/Header.jsx";
 import { refreshUser } from "../redux/users/operations";
+import { useTheme } from "./theme/ThemeContext.js";
 
 const CatalogPage = lazy(() => import("./Pages/CatalogPage/CatalogPage.jsx"));
 const HomePage = lazy(() => import("./Pages/HomePage/HomePage.jsx"));
@@ -23,6 +24,7 @@ const AdminSubmissionsPage = lazy(() =>
 );
 
 function App() {
+  const { resolvedTheme } = useTheme();
   const dispatch = useDispatch();
   const { pathname, search } = useLocation();
   const navigationType = useNavigationType();
@@ -109,7 +111,7 @@ function App() {
         closeOnClick
         draggable
         pauseOnHover
-        theme="dark"
+        theme={resolvedTheme}
       />
     </div>
   );

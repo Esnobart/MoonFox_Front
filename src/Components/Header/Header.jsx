@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 
 import AuthModal from "../Modals/Auth/AuthModal.jsx";
 import Basket from "../Modals/Basket/Basket.jsx";
+import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher.jsx";
 import {
   isRefreshing,
   isUserLogged,
@@ -49,6 +50,7 @@ function Header({ resetToken, onResetPasswordSuccess }) {
       </nav>
 
       <div className={css.headerButtons}>
+        <ThemeSwitcher />
         {authIsRefreshing && !resetToken ? (
           <button
             type="button"

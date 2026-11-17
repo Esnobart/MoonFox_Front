@@ -5,7 +5,7 @@
   width: min(1280px, calc(100% - 32px));
   margin: 0 auto;
   padding: 42px 0 72px;
-  color: #14101b;
+  color: var(--color-text);
 }
 
 .toolbar {
@@ -22,9 +22,9 @@
   align-items: center;
   justify-content: center;
   padding: 0 18px;
-  border: 1px solid #14101b;
-  background-color: #fff;
-  color: #14101b;
+  border: 1px solid var(--color-text);
+  background-color: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
   font-weight: 700;
   text-decoration: none;
@@ -34,12 +34,12 @@
 }
 
 .editLink:hover {
-  background-color: #14101b;
-  color: #fff;
+  background-color: var(--color-action);
+  color: var(--color-action-text);
 }
 
 .editLink:focus-visible {
-  outline: 2px solid #0a33d9;
+  outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
 
@@ -49,7 +49,7 @@
   border: 0;
   border-bottom: 1px solid currentColor;
   background: transparent;
-  color: #14101b;
+  color: var(--color-text);
   cursor: pointer;
   font: inherit;
   opacity: 0.74;
@@ -77,7 +77,7 @@
 
 .eyebrow {
   margin: 0 0 10px;
-  color: #0a33d9;
+  color: var(--color-accent);
   font-family: "IBM Plex Sans Condensed", sans-serif;
   font-size: 14px;
   font-weight: 700;
@@ -87,7 +87,7 @@
 
 .title {
   margin: 0;
-  color: #14101b;
+  color: var(--color-text);
   font-family: "Alata", sans-serif;
   font-size: clamp(38px, 4.8vw, 78px);
   font-weight: 400;
@@ -107,24 +107,24 @@
   justify-content: space-between;
   gap: 18px;
   padding: 10px 0;
-  border-top: 1px solid #d8d2e1;
+  border-top: 1px solid var(--color-border);
   color: inherit;
   text-decoration: none;
 }
 
 .metaItem:last-child {
-  border-bottom: 1px solid #d8d2e1;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .metaItem span,
 .detailsList dt {
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 13px;
   line-height: 1.2;
 }
 
 .metaItem strong {
-  color: #14101b;
+  color: var(--color-text);
   font-size: 18px;
   font-weight: 600;
   line-height: 1.1;
@@ -134,7 +134,7 @@
 .description {
   margin: 28px 0 0;
   max-width: 36ch;
-  color: #403848;
+  color: var(--color-text-body);
   font-size: 17px;
   line-height: 1.55;
 }
@@ -151,8 +151,7 @@
   display: block;
   object-fit: contain;
   background:
-    linear-gradient(135deg, rgba(24, 60, 89, 0.1), rgba(45, 102, 132, 0.16)),
-    #fff;
+    var(--color-image-bg);
 }
 
 .thumbnails {
@@ -170,11 +169,11 @@
 }
 
 .thumbnailButton[aria-pressed="true"] {
-  border-color: #0a33d9;
+  border-color: var(--color-accent);
 }
 
 .thumbnailButton:focus-visible {
-  outline: 2px solid #14101b;
+  outline: 2px solid var(--color-text);
   outline-offset: 2px;
 }
 
@@ -194,7 +193,7 @@
 
 .price {
   margin: 0;
-  color: #14101b;
+  color: var(--color-text);
   font-family: "IBM Plex Sans Condensed", sans-serif;
   font-size: clamp(34px, 3.2vw, 52px);
   font-weight: 600;
@@ -209,19 +208,19 @@
 }
 
 .stock {
-  color: #1f6b45;
+  color: var(--color-success);
 }
 
 .soldOut {
-  color: #9b2f3c;
+  color: var(--color-danger);
 }
 
 .ageBadge {
   width: fit-content;
   margin: 0;
   padding: 7px 12px;
-  border: 1px solid #14101b;
-  color: #14101b;
+  border: 1px solid var(--color-text);
+  color: var(--color-text);
   font-size: 13px;
   font-weight: 800;
   line-height: 1;
@@ -236,14 +235,14 @@
   min-height: 44px;
   display: grid;
   grid-template-columns: 44px 1fr 44px;
-  border: 1px solid #d8d2e1;
-  background-color: #fff;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
 }
 
 .quantityButton {
   border: 0;
   background: transparent;
-  color: #14101b;
+  color: var(--color-text);
   cursor: pointer;
   font: inherit;
   font-size: 20px;
@@ -259,9 +258,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #d8d2e1;
-  border-left: 1px solid #d8d2e1;
-  color: #14101b;
+  border-right: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text);
   font-weight: 700;
 }
 
@@ -286,14 +285,14 @@
 }
 
 .primaryButton {
-  border: 1px solid #14101b;
-  background-color: #14101b;
-  color: #fff;
+  border: 1px solid var(--color-action);
+  background-color: var(--color-action);
+  color: var(--color-action-text);
 }
 
 .primaryButton:hover:not(:disabled) {
-  background-color: #183c59;
-  border-color: #183c59;
+  background-color: var(--color-action-hover);
+  border-color: var(--color-action-hover);
   transform: translateY(-1px);
 }
 
@@ -309,22 +308,22 @@
 
 .secondaryButton,
 .catalogLink {
-  border: 1px solid #d8d2e1;
-  background-color: #fff;
-  color: #14101b;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 .secondaryButton:hover:not(:disabled),
 .catalogLink:hover {
-  border-color: #183c59;
-  color: #183c59;
+  border-color: var(--color-artist-text);
+  color: var(--color-artist-text);
   transform: translateY(-1px);
 }
 
 .savedButton {
-  border-color: #183c59;
-  background-color: #eef6fa;
-  color: #183c59;
+  border-color: var(--color-artist-text);
+  background-color: var(--color-saved);
+  color: var(--color-artist-text);
 }
 
 .detailsList {
@@ -344,7 +343,7 @@
 
 .detailsList dd {
   margin-top: 4px;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 15px;
   font-weight: 600;
   line-height: 1.25;
@@ -361,7 +360,7 @@
 .text {
   margin: 18px 0 0;
   max-width: 48ch;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 17px;
   line-height: 1.5;
 }

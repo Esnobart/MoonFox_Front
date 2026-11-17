@@ -14,6 +14,7 @@
 .basketIcon {
   width: 24px;
   height: 24px;
+  filter: var(--icon-filter);
 }
 
 .basketBadge {
@@ -27,10 +28,10 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  border: 2px solid #f6f7f9;
+  border: 2px solid var(--color-header);
   border-radius: 9px;
-  background: #0a33d9;
-  color: #fff;
+  background: var(--color-accent-solid);
+  color: var(--color-on-artwork);
   font-size: 9px;
   font-weight: 700;
   line-height: 1;
@@ -40,7 +41,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(8, 6, 13, 0.52);
+  background: var(--color-overlay);
   backdrop-filter: blur(2px);
   animation: overlayIn 180ms ease-out;
 }
@@ -55,10 +56,10 @@
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   box-sizing: border-box;
-  border-left: 1px solid #dedbe4;
-  background: #fff;
-  color: #14101b;
-  box-shadow: -24px 0 64px rgba(8, 6, 13, 0.18);
+  border-left: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-drawer);
   animation: drawerIn 220ms ease-out;
 }
 
@@ -70,12 +71,12 @@
   justify-content: space-between;
   gap: 24px;
   box-sizing: border-box;
-  border-bottom: 1px solid #e5e1e9;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .title {
   margin: 0;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 24px;
   font-weight: 700;
   letter-spacing: 0;
@@ -84,7 +85,7 @@
 
 .description {
   margin: 4px 0 0;
-  color: #756d7e;
+  color: var(--color-text-secondary);
   font-size: 13px;
 }
 
@@ -96,10 +97,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #dedbe4;
+  border: 1px solid var(--color-border);
   border-radius: 50%;
-  background: #fff;
-  color: #14101b;
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   font-size: 25px;
   line-height: 1;
@@ -109,8 +110,8 @@
 }
 
 .close:hover {
-  border-color: #14101b;
-  background: #f6f7f9;
+  border-color: var(--color-text);
+  background: var(--color-surface-hover);
 }
 
 .dialogBody {
@@ -126,7 +127,7 @@
   align-content: center;
   justify-items: center;
   box-sizing: border-box;
-  color: #756d7e;
+  color: var(--color-text-secondary);
   text-align: center;
 }
 
@@ -134,7 +135,7 @@
   margin-top: 18px;
   padding-bottom: 2px;
   border-bottom: 1px solid currentColor;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
@@ -151,14 +152,14 @@
   display: grid;
   grid-template-columns: 96px minmax(0, 1fr);
   gap: 18px;
-  border-bottom: 1px solid #e5e1e9;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .imageLink {
   width: 96px;
   height: 112px;
   display: block;
-  background: #f3f5f7;
+  background: var(--color-surface-muted);
 }
 
 .productImage {
@@ -194,25 +195,25 @@
 }
 
 .productLink {
-  color: #14101b;
+  color: var(--color-text);
   text-decoration: none;
 }
 
 .productLink:hover {
-  color: #0a33d9;
+  color: var(--color-accent);
 }
 
 .productMeta {
   margin: 6px 0 0;
   overflow-wrap: anywhere;
-  color: #756d7e;
+  color: var(--color-text-secondary);
   font-size: 12px;
   line-height: 1.35;
 }
 
 .productPrice {
   margin: 0;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 14px;
   font-weight: 700;
   white-space: nowrap;
@@ -229,14 +230,14 @@
   min-height: 32px;
   display: grid;
   grid-template-columns: 32px 36px 32px;
-  border: 1px solid #dedbe4;
+  border: 1px solid var(--color-border);
 }
 
 .quantityButton {
   padding: 0;
   border: 0;
-  background: #fff;
-  color: #14101b;
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   font: inherit;
   font-size: 16px;
@@ -252,9 +253,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #dedbe4;
-  border-left: 1px solid #dedbe4;
-  color: #14101b;
+  border-right: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text);
   font-size: 13px;
   font-weight: 700;
 }
@@ -264,20 +265,20 @@
   border: 0;
   border-bottom: 1px solid currentColor;
   background: transparent;
-  color: #756d7e;
+  color: var(--color-text-secondary);
   cursor: pointer;
   font: inherit;
   font-size: 12px;
 }
 
 .removeButton:hover:not(:disabled) {
-  color: #14101b;
+  color: var(--color-text);
 }
 
 .dialogFooter {
   padding: 22px 28px 26px;
-  border-top: 1px solid #e5e1e9;
-  background: #f8f9fa;
+  border-top: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-muted);
 }
 
 .subtotalRow {
@@ -285,7 +286,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 24px;
-  color: #14101b;
+  color: var(--color-text);
   font-size: 16px;
 }
 
@@ -295,7 +296,7 @@
 
 .footerNote {
   margin: 5px 0 0;
-  color: #756d7e;
+  color: var(--color-text-secondary);
   font-size: 11px;
 }
 
@@ -303,9 +304,9 @@
   width: 100%;
   min-height: 44px;
   margin-top: 18px;
-  border: 1px solid #14101b;
-  background: #14101b;
-  color: #fff;
+  border: 1px solid var(--color-action);
+  background: var(--color-action);
+  color: var(--color-action-text);
   cursor: pointer;
   font: inherit;
   font-size: 14px;
@@ -316,8 +317,8 @@
 }
 
 .continueButton:hover {
-  border-color: #183c59;
-  background: #183c59;
+  border-color: var(--color-action-hover);
+  background: var(--color-action-hover);
 }
 
 @keyframes overlayIn {

@@ -4,6 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <script id="theme-init">
+      // Apply the saved appearance before the first paint.
+      (() => {
+        let preference = "system";
+        try {
+          const saved = localStorage.getItem("moonfox-theme");
+          if (["system", "light", "dark", "schedule"].includes(saved)) preference = saved;
+        } catch { /* Storage can be disabled by the browser. */ }
+        const hour = new Date().getHours();
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        const theme = preference === "system" ? systemTheme
+          : preference === "schedule" ? (hour >= 7 && hour < 19 ? "light" : "dark")
+          : preference;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.themePreference = preference;
+      })();
+    </script>
     <title>moonfox-front</title>
   </head>
   <body>

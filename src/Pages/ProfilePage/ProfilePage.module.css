@@ -6,7 +6,7 @@
 
 .page {
   padding: 40px 0 76px;
-  color: #17131f;
+  color: var(--color-text);
 }
 
 .backButton {
@@ -15,14 +15,14 @@
   border: 0;
   border-bottom: 1px solid currentColor;
   background: transparent;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   cursor: pointer;
   font: inherit;
   font-size: 14px;
 }
 
 .backButton:hover {
-  color: #17131f;
+  color: var(--color-text);
 }
 
 .profileHeader {
@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 32px;
-  border-bottom: 1px solid #ddd8e5;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .profileIdentity {
@@ -48,10 +48,10 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  border: 1px solid #cfc8da;
+  border: 1px solid var(--color-border-strong);
   border-radius: 50%;
-  background: #183c59;
-  color: #fff;
+  background: var(--color-artist-bg);
+  color: var(--color-on-artwork);
   font-size: 40px;
   font-weight: 700;
 }
@@ -73,8 +73,8 @@
   inset: 0;
   display: grid;
   place-items: center;
-  background: rgb(20 16 27 / 55%);
-  color: #fff;
+  background: var(--color-image-overlay);
+  color: var(--color-on-artwork);
   font-size: 16px;
   font-weight: 700;
   opacity: 0;
@@ -87,7 +87,7 @@
 }
 
 .editableAvatar:focus-visible {
-  outline: 2px solid #0a33d9;
+  outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
 
@@ -104,7 +104,7 @@
 .identity h1 {
   margin: 5px 0 0;
   overflow-wrap: anywhere;
-  color: #17131f;
+  color: var(--color-text);
   font-size: clamp(38px, 5vw, 58px);
   font-weight: 600;
   letter-spacing: 0;
@@ -114,7 +114,7 @@
 .role,
 .eyebrow {
   margin: 0;
-  color: #0a33d9;
+  color: var(--color-accent);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0;
@@ -123,7 +123,7 @@
 
 .privateDetail {
   margin: 10px 0 0;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 14px;
 }
 
@@ -152,25 +152,25 @@
 }
 
 .primaryButton {
-  border: 1px solid #17131f;
-  background: #17131f;
-  color: #fff;
+  border: 1px solid var(--color-action);
+  background: var(--color-action);
+  color: var(--color-action-text);
 }
 
 .primaryButton:hover {
-  border-color: #183c59;
-  background: #183c59;
+  border-color: var(--color-action-hover);
+  background: var(--color-action-hover);
 }
 
 .outlineButton {
-  border: 1px solid #bcb5c7;
-  background: #fff;
-  color: #17131f;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .outlineButton:hover {
-  border-color: #183c59;
-  color: #183c59;
+  border-color: var(--color-artist-text);
+  color: var(--color-artist-text);
 }
 
 .profileSection {
@@ -187,7 +187,7 @@
 
 .sectionHeader h2 {
   margin: 5px 0 0;
-  color: #17131f;
+  color: var(--color-text);
   font-size: 29px;
   letter-spacing: 0;
 }
@@ -195,14 +195,14 @@
 .textLink {
   padding-bottom: 2px;
   border-bottom: 1px solid currentColor;
-  color: #17131f;
+  color: var(--color-text);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .textLink:hover {
-  color: #0a33d9;
+  color: var(--color-accent);
 }
 
 .productsList {
@@ -223,10 +223,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid #ddd8e5;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 6px;
-  background: #fff;
-  color: #17131f;
+  background: var(--color-surface);
+  color: var(--color-text);
   text-decoration: none;
   transition:
     border-color 160ms ease,
@@ -235,8 +235,8 @@
 }
 
 .productLink:hover {
-  border-color: #183c59;
-  box-shadow: 0 12px 28px rgba(23, 19, 31, 0.1);
+  border-color: var(--color-artist-bg);
+  box-shadow: var(--shadow-card);
   transform: translateY(-2px);
 }
 
@@ -245,7 +245,7 @@
   aspect-ratio: 4 / 3;
   display: block;
   object-fit: cover;
-  background: #ece7f2;
+  background: var(--color-image-bg);
 }
 
 .productInfo {
@@ -263,20 +263,20 @@
 .productInfo h3 {
   margin: 0;
   overflow-wrap: anywhere;
-  color: #17131f;
+  color: var(--color-text);
   font-size: 16px;
   line-height: 1.25;
 }
 
 .productInfo p {
   margin: 5px 0 0;
-  color: #6b6375;
+  color: var(--color-text-secondary);
   font-size: 12px;
 }
 
 .productInfo strong {
   flex: 0 0 auto;
-  color: #183c59;
+  color: var(--color-artist-text);
   font-size: 14px;
 }
 
@@ -285,9 +285,9 @@
   margin: 0;
   display: grid;
   place-items: center;
-  border-top: 1px solid #ddd8e5;
-  border-bottom: 1px solid #ddd8e5;
-  color: #6b6375;
+  border-top: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
   text-align: center;
 }
 
@@ -296,7 +296,7 @@
   margin: 0;
   display: grid;
   place-items: center;
-  color: #6b6375;
+  color: var(--color-text-secondary);
 }
 
 .state {
@@ -306,7 +306,7 @@
   align-content: center;
   justify-items: start;
   gap: 12px;
-  color: #6b6375;
+  color: var(--color-text-secondary);
 }
 
 .state h1,

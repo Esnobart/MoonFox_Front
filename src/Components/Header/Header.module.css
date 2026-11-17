@@ -1,5 +1,5 @@
 .headerContainer {
-    background-color: #f6f7f9;
+    background-color: var(--color-header);
     padding: 8px clamp(16px, 4vw, 48px);
     width: 100%;
     min-height: 64px;
@@ -8,7 +8,7 @@
     justify-content: space-between;
     box-sizing: border-box;
     gap: 24px;
-    border-bottom: 1px solid #e6e1ef;
+    border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .headerLogoContainer {
@@ -27,13 +27,13 @@
 
 .headerTitle {
     margin: 0;
-    color: #0a33d9;
+    color: var(--color-accent);
     font-size: 24px;
     font-weight: 600;
 }
 
 .headerText {
-    color: #16eaf8;
+    color: var(--color-brand-detail);
 }
 
 .headerButtons {
@@ -60,6 +60,10 @@
     opacity: 0.45;
 }
 
+.accountIconButton img {
+    filter: var(--icon-filter);
+}
+
 .headerLinks {
     display: flex;
     align-items: center;
@@ -74,7 +78,7 @@
     min-height: 40px;
     padding: 0 12px;
     border-radius: 6px;
-    color: #6b6375;
+    color: var(--color-text-secondary);
     font-size: 14px;
     font-weight: 600;
     line-height: 1.2;
@@ -83,25 +87,25 @@
 }
 
 .headerLink:hover {
-    background-color: #eaeefb;
-    color: #0a33d9;
+    background-color: var(--color-highlight);
+    color: var(--color-accent);
 }
 
 .headerLink[aria-current="page"] {
-    background-color: #e4eafa;
-    color: #0a33d9;
+    background-color: var(--color-highlight-hover);
+    color: var(--color-accent);
 }
 
 .headerContainer :focus-visible {
-    outline: 2px solid #0a33d9;
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
     .headerContainer {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
-        gap: 10px 16px;
+        gap: 10px 12px;
         padding-block: 12px 8px;
     }
 
@@ -115,7 +119,7 @@
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 4px;
-        border-top: 1px solid #e6e1ef;
+        border-top: 1px solid var(--color-border-subtle);
         padding-top: 8px;
     }
 

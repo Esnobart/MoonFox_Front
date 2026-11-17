@@ -1,8 +1,8 @@
 .footer {
   margin-top: 72px;
-  border-top: 1px solid #e6e1ef;
-  background: linear-gradient(180deg, #ffffff 0%, #f3f0f7 100%);
-  color: #4f465c;
+  border-top: 1px solid var(--color-border-subtle);
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-footer-end) 100%);
+  color: var(--color-text-body);
 }
 
 .footerInner {
@@ -28,7 +28,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #17131f;
+  color: var(--color-text);
   text-decoration: none;
 }
 
@@ -38,27 +38,27 @@
 }
 
 .brandName {
-  color: #0a33d9;
+  color: var(--color-accent);
   font-size: 28px;
   font-weight: 800;
   line-height: 1;
 }
 
 .brandName span {
-  color: #12b8c8;
+  color: var(--color-brand-detail);
 }
 
 .brandText {
   max-width: 380px;
   margin: 18px 0 0;
-  color: #5f566b;
+  color: var(--color-text-secondary);
   font-size: 15px;
   line-height: 1.6;
 }
 
 .columnTitle {
   margin: 0 0 14px;
-  color: #17131f;
+  color: var(--color-text);
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -78,7 +78,7 @@
   padding: 0;
   border: none;
   background: none;
-  color: #5f566b;
+  color: var(--color-text-secondary);
   cursor: pointer;
   font: inherit;
   text-decoration: none;
@@ -92,7 +92,7 @@
 .footerLink:hover,
 .footerButton:hover,
 .bottomButton:hover {
-  color: #0a33d9;
+  color: var(--color-accent);
   transform: translateX(2px);
 }
 
@@ -108,16 +108,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #d8d0e5;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--color-surface);
   transition:
     border-color 160ms ease,
     transform 160ms ease;
 }
 
 .socialLink:hover {
-  border-color: #0a33d9;
+  border-color: var(--color-accent);
   transform: translateY(-2px);
 }
 
@@ -125,6 +125,7 @@
   width: 20px;
   height: 20px;
   object-fit: contain;
+  filter: var(--icon-filter);
 }
 
 .footerBottom {
@@ -135,8 +136,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  border-top: 1px solid #e1dce9;
-  color: #746b80;
+  border-top: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
   font-size: 14px;
 }
 
