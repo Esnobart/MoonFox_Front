@@ -52,18 +52,21 @@ export const refreshUser = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
     "users/updateProfile",
-    async ({ username, avatar }, thunkAPI) => {
+    async ({ username, avatar, artistBanner, catalogBanner }, thunkAPI) => {
         try {
             const userId = thunkAPI.getState().users.user._id;
             const body = new FormData();
             if (username !== undefined) body.append("username", username.trim());
-            if (avatar) body.append("avatar", avatar, avatar.name);
+            for (const [field, file] of Object.entries({ avatar, artistBanner, catalogBanner })) {
+                if (file) body.append(field, file, file.name);
+            }
 
             const response = await api.patch('users/current', body, { signal: thunkAPI.signal });
             const user = response.data?.user;
 
             if (user?._id !== userId || typeof user?.username !== "string" ||
-                !user.username.trim() || !(user.avatar === null || typeof user.avatar === "string")) {
+                !user.username.trim() || !Array.isArray(user.avatar) ||
+                user.avatar.length > 3 || !user.avatar.every((image) => image === null || typeof image === "string")) {
                 return thunkAPI.rejectWithValue("Could not save your profile. Please try again.");
             }
 

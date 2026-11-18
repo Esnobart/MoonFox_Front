@@ -9,6 +9,7 @@ import {
   isRefreshing,
   isUserLogged,
   userData,
+  getUserImage,
 } from "../../../redux/users/selectors.js";
 import { updateProfile } from "../../../redux/users/operations.js";
 import AvatarUploadField from "../../Components/AvatarUploadField/AvatarUploadField.jsx";
@@ -29,11 +30,24 @@ function ProfileEditForm({ user }) {
   } = useForm({
     defaultValues: {
       username: user.username ?? "",
-      avatar: user.avatar ? { url: user.avatar } : null,
+      avatar: getUserImage(user.avatar)
+        ? { url: getUserImage(user.avatar) }
+        : null,
+      artistBanner: getUserImage(user.avatar, 1)
+        ? { url: getUserImage(user.avatar, 1) }
+        : null,
+      catalogBanner: getUserImage(user.avatar, 2)
+        ? { url: getUserImage(user.avatar, 2) }
+        : null,
     },
   });
 
-  const onSubmit = async ({ username, avatar }) => {
+  const onSubmit = async ({
+    username,
+    avatar,
+    artistBanner,
+    catalogBanner,
+  }) => {
     clearErrors("root.server");
 
     try {
@@ -41,11 +55,15 @@ function ProfileEditForm({ user }) {
         updateProfile({
           username: username.trim() !== user.username ? username : undefined,
           avatar: avatar?.file,
+          artistBanner: artistBanner?.file,
+          catalogBanner: catalogBanner?.file,
         }),
       ).unwrap();
 
       toast.success("Profile updated.");
-      navigate(`/profile/${encodeURIComponent(savedUser.username)}`, { replace: true });
+      navigate(`/profile/${encodeURIComponent(savedUser.username)}`, {
+        replace: true,
+      });
     } catch (err) {
       setError("root.server", {
         type: "server",
@@ -82,7 +100,9 @@ function ProfileEditForm({ user }) {
                 autoCapitalize="none"
                 spellCheck={false}
                 aria-invalid={Boolean(errors.username)}
-                aria-describedby={errors.username ? "username-error" : undefined}
+                aria-describedby={
+                  errors.username ? "username-error" : undefined
+                }
                 {...register("username", {
                   setValueAs: (value) => value.trim(),
                   required: "Enter a username.",
@@ -101,6 +121,39 @@ function ProfileEditForm({ user }) {
             </div>
           </div>
         </div>
+        {user.role === "Creator" && (
+          <div className={css.bannerFields}>
+            {[
+              [
+                "artistBanner",
+                "Artist catalog banner",
+                "Shown in the Artists catalog.",
+              ],
+              [
+                "catalogBanner",
+                "General catalog banner",
+                "Shown on your card in the main catalog.",
+              ],
+            ].map(([name, label, hint]) => (
+              <Controller
+                key={name}
+                name={name}
+                control={control}
+                render={({ field }) => (
+                  <AvatarUploadField
+                    value={field.value}
+                    onChange={field.onChange}
+                    username={user.username}
+                    disabled={isSubmitting}
+                    label={label}
+                    hint={hint}
+                    banner
+                  />
+                )}
+              />
+            ))}
+          </div>
+        )}
       </fieldset>
       <div className={css.formFooter}>
         {errors.root?.server ? (
@@ -136,10 +189,9 @@ function ProfileEditForm({ user }) {
 }
 
 function ProfileEditor({ user, username }) {
-  // The parent remounts this guard on account or route changes. Keep ownership
-  // stable while a successful rename updates Redux before navigation completes.
   const [isOwner] = useState(
-    () => user.username?.trim().toLowerCase() === username?.trim().toLowerCase(),
+    () =>
+      user.username?.trim().toLowerCase() === username?.trim().toLowerCase(),
   );
   if (!isOwner) {
     return <Navigate to={`/profile/${encodeURIComponent(username)}`} replace />;
@@ -176,14 +228,24 @@ function EditProfilePage() {
   const authIsRefreshing = useSelector(isRefreshing);
 
   if (authIsRefreshing) {
-    return <div className={css.state} role="status">Checking access...</div>;
+    return (
+      <div className={css.state} role="status">
+        Checking access...
+      </div>
+    );
   }
 
   if (!isLogged) {
     return <Navigate to={`/profile/${encodeURIComponent(username)}`} replace />;
   }
 
-  return <ProfileEditor key={`${user._id}:${username}`} user={user} username={username} />;
+  return (
+    <ProfileEditor
+      key={`${user._id}:${username}`}
+      user={user}
+      username={username}
+    />
+  );
 }
 
 export default EditProfilePage;

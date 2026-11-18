@@ -19,7 +19,7 @@ const createEmptyUser = () => ({
     _id: null,
     username: null,
     email: null,
-    avatar: null,
+    avatar: [],
     role: null,
     wishlist: [],
     basket: []

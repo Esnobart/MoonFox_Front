@@ -15,6 +15,7 @@ import {
   productsLoading,
   productsRejected,
 } from "../../../redux/products/selectors.js";
+import { getUserImage } from "../../../redux/users/selectors.js";
 import css from "./CatalogPage.module.css";
 
 const catalogTitles = {
@@ -107,6 +108,8 @@ function ProductList({ products, location, grouped = false }) {
 function CatalogGroup({ group, type, location }) {
   const isAuthor = type === "authors";
   const name = isAuthor ? group.username : group.name;
+  const profilePhoto = getUserImage(group.avatar);
+  const banner = isAuthor ? getUserImage(group.avatar, 1) : group.coverImg;
   const destination = isAuthor
     ? `/profile/${encodeURIComponent(group.username)}`
     : `/catalog?collection=${encodeURIComponent(group.name)}`;
@@ -122,17 +125,14 @@ function CatalogGroup({ group, type, location }) {
           isAuthor ? css.authorBanner : css.collectionBanner
         }`}
       >
-        {isAuthor ? (
-          group.avatar ? (
-            <img src={group.avatar} alt="" className={css.groupAvatar} />
+        {banner && <img src={banner} alt="" className={css.groupCover} />}
+        {isAuthor && (
+          profilePhoto ? (
+            <img src={profilePhoto} alt="" className={css.groupAvatar} />
           ) : (
             <span className={css.groupAvatarFallback} aria-hidden="true">
               {name.charAt(0).toUpperCase()}
             </span>
-          )
-        ) : (
-          group.coverImg && (
-            <img src={group.coverImg} alt="" className={css.groupCover} />
           )
         )}
 
@@ -152,6 +152,7 @@ function CatalogOverview({ authors, productTypes, location }) {
   const cards = [
     ...authors.map((author) => ({
       key: `author-${author._id}`,
+      image: getUserImage(author.avatar, 2),
       title: author.username,
       label: `View works by ${author.username}`,
       to: `/catalog?${new URLSearchParams({ author: author.username })}`,
@@ -180,6 +181,7 @@ function CatalogOverview({ authors, productTypes, location }) {
             className={css.catalogCard}
             aria-label={card.label}
           >
+            {card.image && <img src={card.image} alt="" className={css.catalogCardImage} loading="lazy" />}
             <span className={css.catalogCardTitle}>{card.title}</span>
           </Link>
         </li>

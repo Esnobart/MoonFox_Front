@@ -23,6 +23,7 @@ const socialLinks = [
     href: "https://x.com/MoonFoxTail",
     icon: "/icons/twitter.svg",
     label: "Twitter",
+    monochrome: true,
   },
   // {
   //   href: "https://www.tiktok.com/@moonfox.art",
@@ -81,7 +82,7 @@ function Footer() {
                 <img
                   src={link.icon}
                   alt=""
-                  className={css.socialIcon}
+                  className={`${css.socialIcon} ${link.monochrome ? css.monochromeIcon : ""}`}
                   aria-hidden="true"
                 />
               </a>

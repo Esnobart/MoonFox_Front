@@ -1,8 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
+import ArtistMarquee from "../../Components/ArtistMarquee/ArtistMarquee.jsx";
+import {
+  createSmoothScroll,
+  getWheelScrollDelta,
+} from "../../utils/horizontalScroll.js";
 import { fetchProducts } from "../../../redux/products/operations.js";
 import {
   fetchedAuthors,
@@ -31,59 +36,85 @@ function Arrow() {
   );
 }
 
-const getWheelScrollDelta = (event, list) => {
-  const rawDelta =
-    Math.abs(event.deltaX) > Math.abs(event.deltaY)
-      ? event.deltaX
-      : event.deltaY;
-
-  if (event.deltaMode === 1) {
-    return rawDelta * 32;
-  }
-
-  if (event.deltaMode === 2) {
-    return rawDelta * list.clientWidth;
-  }
-
-  return rawDelta;
-};
-
-const scrollHorizontalListWithWheel = (event) => {
-  const list = event.target.closest("[data-horizontal-scroll]");
-
-  if (!list) {
-    return;
-  }
-
-  const maxScrollLeft = list.scrollWidth - list.clientWidth;
-
-  if (maxScrollLeft <= 0) {
-    return;
-  }
-
-  const previousScrollLeft = list.scrollLeft;
-  const scrollDelta = getWheelScrollDelta(event, list);
-  const nextScrollLeft = Math.max(
-    0,
-    Math.min(previousScrollLeft + scrollDelta, maxScrollLeft),
-  );
-
-  event.preventDefault();
-  list.scrollLeft = nextScrollLeft;
-};
-
 function HomePage() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const popularListRef = useRef(null);
   const popularProducts = useSelector(productsByPopularity);
   const homeCollections = useSelector(fetchedCollections);
-  const featuredAuthors = useSelector(fetchedAuthors).slice(0, 10);
+  const featuredAuthors = useSelector(fetchedAuthors);
+  const artistRows = [
+    featuredAuthors.filter((_, index) => index % 2 === 0),
+    featuredAuthors.length > 1
+      ? featuredAuthors.filter((_, index) => index % 2 === 1)
+      : featuredAuthors,
+  ];
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
   useEffect(() => {
+    const list = popularListRef.current;
+    const bounds = list.getBoundingClientRect();
+    const cards = [...list.children];
+
+    cards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      card.dataset.productReveal =
+        rect.right > bounds.left && rect.left < bounds.right
+          ? "visible"
+          : "pending";
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            entry.target.dataset.productReveal = "pending";
+          } else if (
+            entry.intersectionRatio >= 0.01 &&
+            entry.target.dataset.productReveal === "pending"
+          ) {
+            entry.target.dataset.productReveal = "entering";
+          }
+        });
+      },
+      { root: list, threshold: [0, 0.01] },
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [popularProducts]);
+
+  useEffect(() => {
+    const scrollers = new Map();
+    const scrollHorizontalListWithWheel = (event) => {
+      if (event.ctrlKey) return;
+
+      const list = event.target.closest?.("[data-horizontal-scroll]");
+      if (!list || list.scrollWidth <= list.clientWidth) return;
+
+      if (!scrollers.has(list)) {
+        let remainder = 0;
+        scrollers.set(
+          list,
+          createSmoothScroll((delta) => {
+            const maxScrollLeft = list.scrollWidth - list.clientWidth;
+            const nextScrollLeft = Math.max(
+              0,
+              Math.min(list.scrollLeft + delta + remainder, maxScrollLeft),
+            );
+            list.scrollLeft = nextScrollLeft;
+            remainder = nextScrollLeft - list.scrollLeft;
+          }),
+        );
+      }
+
+      event.preventDefault();
+      scrollers.get(list).scrollBy(getWheelScrollDelta(event, list));
+    };
+
     document.addEventListener("wheel", scrollHorizontalListWithWheel, {
       capture: true,
       passive: false,
@@ -95,6 +126,7 @@ function HomePage() {
         scrollHorizontalListWithWheel,
         true,
       );
+      scrollers.forEach((scroller) => scroller.cancel());
     };
   }, []);
 
@@ -110,48 +142,56 @@ function HomePage() {
         </div>
 
         <ul
+          ref={popularListRef}
           className={`${css.scrollList} ${css.productsList}`}
           data-horizontal-scroll
         >
           {popularProducts.map((product) => (
             <li className={css.productItem} key={product._id}>
-              <Link
-                to={`/products/${product._id}`}
-                state={{ from: location }}
-                className={css.productImageLink}
-              >
-                <img
-                  className={css.productImage}
-                  src={product.images?.[0] || "/images/product-placeholder.svg"}
-                  alt={product.name}
-                />
-              </Link>
-
-              <div className={css.productInfo}>
+              <div className={css.productCard}>
                 <Link
                   to={`/products/${product._id}`}
                   state={{ from: location }}
-                  className={css.productNameLink}
+                  className={css.productImageLink}
                 >
-                  <h2 className={css.productName}>{product.name}</h2>
+                  <img
+                    className={css.productImage}
+                    src={
+                      product.images?.[0] || "/images/product-placeholder.svg"
+                    }
+                    alt={product.name}
+                    width="320"
+                    height="320"
+                    decoding="async"
+                  />
                 </Link>
-                <Link
-                  to={`/profile/${encodeURIComponent(product.author?.username || "")}`}
-                  state={{ from: location }}
-                  className={css.productMetaLink}
-                >
-                  {product.author?.username || "Unknown artist"}
-                </Link>
-                <Link
-                  to={`/catalog?collection=${encodeURIComponent(product.collectionName?.name || "")}`}
-                  state={{ from: location }}
-                  className={css.productMetaLink}
-                >
-                  {product.collectionName?.name || "Independent work"}
-                </Link>
-                <p className={css.productPrice}>
-                  {`$${Number(product.price || 0).toFixed(2)}`}
-                </p>
+
+                <div className={css.productInfo}>
+                  <Link
+                    to={`/products/${product._id}`}
+                    state={{ from: location }}
+                    className={css.productNameLink}
+                  >
+                    <h2 className={css.productName}>{product.name}</h2>
+                  </Link>
+                  <Link
+                    to={`/profile/${encodeURIComponent(product.author?.username || "")}`}
+                    state={{ from: location }}
+                    className={`${css.productMetaLink} ${css.productAuthor}`}
+                  >
+                    {product.author?.username || "Unknown artist"}
+                  </Link>
+                  <Link
+                    to={`/catalog?collection=${encodeURIComponent(product.collectionName?.name || "")}`}
+                    state={{ from: location }}
+                    className={css.productMetaLink}
+                  >
+                    {product.collectionName?.name || "Independent work"}
+                  </Link>
+                  <p className={css.productPrice}>
+                    {`$${Number(product.price || 0).toFixed(2)}`}
+                  </p>
+                </div>
               </div>
             </li>
           ))}
@@ -198,7 +238,10 @@ function HomePage() {
                         className={css.productLink}
                       >
                         <img
-                          src={product.images?.[0] || "/images/product-placeholder.svg"}
+                          src={
+                            product.images?.[0] ||
+                            "/images/product-placeholder.svg"
+                          }
                           alt={product.name}
                           className={css.productImage}
                           loading="lazy"
@@ -236,40 +279,32 @@ function HomePage() {
         </div>
       </section>
 
-      <section className={css.artistsSection}>
+      <section
+        className={css.artistsSection}
+        aria-labelledby="home-artists-title"
+      >
         <div className={css.sectionHeader}>
-          <h2 className={css.sectionTitle}>Follow the Artists</h2>
+          <h2 id="home-artists-title" className={css.sectionTitle}>
+            Follow the Artists
+          </h2>
         </div>
 
-        <ul
-          className={`${css.scrollList} ${css.artistsList}`}
-          data-horizontal-scroll
-        >
-          {featuredAuthors.map((author) => (
-            <li className={css.artistItem} key={author._id}>
-              <Link
-                to={`/profile/${encodeURIComponent(author.username)}`}
-                state={{ from: location }}
-                className={css.artistLink}
-              >
-                {author.avatar ? (
-                  <img
-                    className={css.artistImage}
-                    src={author.avatar}
-                    alt={author.username}
-                  />
-                ) : (
-                  <span className={css.artistFallback} aria-hidden="true">
-                    {author.username.charAt(0).toUpperCase()}
-                  </span>
-                )}
-                <span>{author.username}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className={css.artistMarquees}>
+          {artistRows.map(
+            (authors, index) =>
+              authors.length > 0 && (
+                <ArtistMarquee
+                  key={index}
+                  authors={authors}
+                  location={location}
+                  direction={index === 0 ? "right" : "left"}
+                  label={`Featured artists, row ${index + 1}`}
+                />
+              ),
+          )}
+        </div>
 
-        <div className={css.viewAllRow}>
+        <div className={`${css.viewAllRow} ${css.artistActions}`}>
           <Link
             to="/catalog?type=authors"
             state={{ from: location }}

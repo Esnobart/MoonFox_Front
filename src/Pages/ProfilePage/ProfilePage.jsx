@@ -24,6 +24,7 @@ import {
   userData,
 } from "../../../redux/users/selectors.js";
 import ProductSubmissionModal from "../../Components/Modals/ProductSubmission/ProductSubmissionModal.jsx";
+import { getUserImage } from "../../../redux/users/selectors.js";
 import css from "./ProfilePage.module.css";
 
 const formatPrice = (price) => `$${Number(price || 0).toFixed(2)}`;
@@ -170,6 +171,7 @@ function ProfilePage() {
     );
   }
 
+  const profilePhoto = getUserImage(profile.avatar);
   const initial = profile.username.charAt(0).toUpperCase();
   const displayRole = isCreator ? "Artist" : profile.role;
 
@@ -191,8 +193,8 @@ function ProfilePage() {
               className={`${css.avatar} ${css.editableAvatar}`}
               aria-label="Edit profile avatar"
             >
-              {profile.avatar ? (
-                <img src={profile.avatar} alt={`${profile.username} avatar`} />
+              {profilePhoto ? (
+                <img src={profilePhoto} alt={`${profile.username} avatar`} />
               ) : (
                 <span aria-hidden="true">{initial}</span>
               )}
@@ -200,8 +202,8 @@ function ProfilePage() {
             </Link>
           ) : (
             <div className={css.avatar}>
-              {profile.avatar ? (
-                <img src={profile.avatar} alt={`${profile.username} avatar`} />
+              {profilePhoto ? (
+                <img src={profilePhoto} alt={`${profile.username} avatar`} />
               ) : (
                 <span aria-hidden="true">{initial}</span>
               )}

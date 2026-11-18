@@ -60,19 +60,13 @@
   flex: 0 0 clamp(180px, 10.5vw, 270px);
 }
 
-.artistsList .artistItem {
-  flex: 0 0 clamp(120px, 7vw, 190px);
-}
-
-.productItem,
-.artistItem {
+.productItem {
   min-width: 0;
 }
 
 .productImageLink,
 .productNameLink,
 .productMetaLink,
-.artistLink,
 .viewAllLink {
   color: inherit;
   text-decoration: none;
@@ -81,104 +75,129 @@
 .productItem {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+}
+
+.productCard {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: var(--color-surface);
+  transition: border-color 180ms ease;
+}
+
+.productItem:hover .productCard,
+.productItem:focus-within .productCard {
+  border-color: var(--color-accent);
+}
+
+.productItem[data-product-reveal="pending"] .productCard {
+  opacity: 0;
+}
+
+.productItem[data-product-reveal="entering"] .productCard {
+  animation: productBloom 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes productBloom {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.84);
+    filter: blur(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 .productImageLink {
   display: block;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--color-image-bg);
 }
 
-.productImage {
+.productImageLink .productImage {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   display: block;
   object-fit: contain;
   background-color: var(--color-surface);
-  transition: transform 180ms ease;
+  transition: transform 240ms ease;
 }
 
-.productItem:hover .productImage,
-.artistLink:hover .artistImage,
-.artistLink:hover .artistFallback {
-  transform: translateY(-3px);
+.productItem:hover .productImage {
+  transform: scale(1.025);
 }
 
 .productInfo {
-  min-height: 92px;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 5px;
+  padding: 14px;
 }
 
 .productName {
-  margin: 0 0 6px;
+  margin: 0 0 5px;
   color: var(--color-text);
-  font-size: 26px;
-  font-weight: 500;
-  line-height: 1.1;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
 }
 
-.productMetaLink,
-.productInfo p {
+.productMetaLink {
   margin: 0;
-  color: var(--color-text);
-  font-size: 19px;
-  line-height: 1.3;
-  font-family: 'IBM Plex Sans Condensed', sans-serif;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
-.productNameLink:hover,
+.productAuthor {
+  color: var(--color-text-body);
+  font-weight: 600;
+}
+
+.productNameLink:hover .productName,
 .productMetaLink:hover {
   color: var(--color-accent);
 }
 
 .productInfo .productPrice {
-  padding-top: 8px;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.artistLink span {
-  overflow-wrap: anywhere;
+  margin: auto 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border-subtle);
+  color: var(--color-text);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 
 .artistsSection {
   padding: 28px 0 76px;
 }
 
-.artistsList {
-  margin-top: 56px;
-}
-
-.artistLink {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  color: var(--color-text);
-  font-size: 18px;
-  text-align: center;
-}
-
-.artistImage {
-  width: min(128px, 100%);
-  aspect-ratio: 1 / 1;
-  display: block;
-  object-fit: cover;
-  background-color: var(--color-surface);
-  transition: transform 180ms ease;
-}
-
-.artistFallback {
-  width: min(128px, 100%);
-  aspect-ratio: 1 / 1;
+.artistMarquees {
   display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--color-artist-bg);
-  color: var(--color-on-artwork);
-  font-size: 38px;
-  font-weight: 700;
-  transition: transform 180ms ease;
+  gap: clamp(8px, 1vw, 16px);
+  margin-top: 40px;
+}
+
+.artistActions {
+  margin-top: 18px;
 }
 
 .viewAllRow {
@@ -219,9 +238,6 @@
     flex-basis: clamp(180px, 28vw, 220px);
   }
 
-  .artistsList .artistItem {
-    flex-basis: clamp(120px, 18vw, 150px);
-  }
 }
 
 @media (max-width: 680px) {
@@ -244,25 +260,20 @@
     flex-basis: clamp(170px, 62vw, 240px);
   }
 
-  .artistsList {
-    margin-top: 36px;
-  }
-
-  .artistsList .artistItem {
-    flex-basis: clamp(112px, 34vw, 140px);
+  .artistMarquees {
+    margin-top: 28px;
   }
 
   .productName {
-    font-size: 22px;
+    font-size: 19px;
   }
 
-  .productMetaLink,
-  .productInfo p {
-    font-size: 17px;
+  .productMetaLink {
+    font-size: 13px;
   }
 
   .productInfo .productPrice {
-    font-size: 21px;
+    font-size: 20px;
   }
 }
 
@@ -533,6 +544,20 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .productItem[data-product-reveal] .productCard {
+    animation: none;
+    opacity: 1;
+  }
+
+  .productCard,
+  .productImageLink .productImage {
+    transition: none;
+  }
+
+  .productItem:hover .productImage {
+    transform: none;
+  }
+
   .section a {
     transition: none;
   }

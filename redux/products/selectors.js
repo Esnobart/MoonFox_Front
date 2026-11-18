@@ -68,7 +68,7 @@ export const productRejected = (state) => state.products.productRejected;
 
 export const productsByPopularity = createSelector(
   [fetchedProducts],
-  (products) => sortByPopularity(products).slice(0, 10),
+  (products) => sortByPopularity(products).slice(0, 20),
 );
 
 export const fetchedAuthors = createSelector([fetchedProducts], (products) => {

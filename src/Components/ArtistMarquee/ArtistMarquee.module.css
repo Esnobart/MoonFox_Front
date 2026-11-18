@@ -1,0 +1,142 @@
+.viewport {
+  --artist-gap: clamp(14px, 1.5vw, 24px);
+  min-width: 0;
+  overflow: hidden;
+  padding-block: 6px;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: travel var(--artist-duration, 40s) linear infinite;
+}
+
+.moveRight {
+  animation-direction: reverse;
+}
+
+.viewport:hover .track,
+.viewport:focus-within .track {
+  animation-play-state: paused;
+}
+
+.list {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--artist-gap);
+  margin: 0;
+  padding: 0 var(--artist-gap) 0 0;
+  list-style: none;
+}
+
+.item {
+  flex: 0 0 auto;
+  width: calc(clamp(240px, 28vw, 400px) / 2);
+  min-width: 0;
+}
+
+.link {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 12px;
+  border: 1px solid var(--color-artist-bg);
+  border-radius: 8px;
+  background: var(--color-artist-bg);
+  color: var(--color-on-artwork);
+  text-decoration: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.link:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.link:has(.image)::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-image-overlay);
+  content: "";
+}
+
+.name {
+  max-width: 100%;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.viewport[data-keyboard-focused="true"] {
+  overflow-x: auto;
+}
+
+.viewport[data-keyboard-focused="true"] .track {
+  animation: none;
+  transform: none;
+}
+
+.viewport[data-keyboard-focused="true"] [aria-hidden="true"] {
+  display: none;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@keyframes travel {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 680px) {
+  .item {
+    width: calc(clamp(220px, 72vw, 320px) / 2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    overflow-x: auto;
+  }
+
+  .track {
+    animation: none;
+    transform: none;
+  }
+
+  .list {
+    padding-inline: 16px;
+  }
+
+  .viewport [aria-hidden="true"] {
+    display: none;
+  }
+
+  .link {
+    transition: none;
+  }
+}

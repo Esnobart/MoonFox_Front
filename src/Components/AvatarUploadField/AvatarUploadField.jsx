@@ -11,7 +11,10 @@ const acceptedTypes = [
 ];
 const maxFileSize = 10 * 1024 * 1024;
 
-function AvatarUploadField({ value, onChange, username, disabled }) {
+function AvatarUploadField({
+  value, onChange, username, disabled, label = "Avatar",
+  hint = "Click your avatar to choose a photo.", banner = false,
+}) {
   const inputRef = useRef(null);
   const previewUrls = useRef(new Set());
   const fieldId = useId();
@@ -50,26 +53,26 @@ function AvatarUploadField({ value, onChange, username, disabled }) {
 
   return (
     <div className={css.field}>
-      <span className={css.label}>Avatar</span>
+      <span className={css.label}>{label}</span>
       <input
         ref={inputRef}
         type="file"
         accept={acceptedTypes.join(",")}
         onChange={handleFileChange}
         disabled={disabled}
-        aria-label="Choose avatar"
+        aria-label={`Choose ${label.toLowerCase()}`}
         hidden
       />
       <button
         type="button"
-        className={css.avatar}
+        className={`${css.avatar} ${banner ? css.banner : ""}`}
         onClick={() => inputRef.current?.click()}
         disabled={disabled}
-        aria-label="Edit avatar"
+        aria-label={`Edit ${label.toLowerCase()}`}
         aria-describedby={`${fieldId}-hint${error ? ` ${fieldId}-error` : ""}`}
       >
         {value?.url ? (
-          <img src={value.url} alt="Avatar preview" />
+          <img src={value.url} alt={`${label} preview`} />
         ) : (
           <span className={css.initial} aria-hidden="true">
             {username?.trim().charAt(0).toUpperCase() || "?"}
@@ -80,7 +83,7 @@ function AvatarUploadField({ value, onChange, username, disabled }) {
         </span>
       </button>
       <p id={`${fieldId}-hint`} className={css.hint}>
-        Click your avatar to choose a photo.
+        {hint}
         <br />
         JPG, PNG, WebP, GIF or AVIF. Up to 10 MiB.
       </p>
