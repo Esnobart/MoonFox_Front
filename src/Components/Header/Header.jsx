@@ -4,6 +4,8 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import AuthModal from "../Modals/Auth/AuthModal.jsx";
 import Basket from "../Modals/Basket/Basket.jsx";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher.jsx";
+import HeaderIcon from "./HeaderIcon.jsx";
+import iconCss from "./HeaderIconButton.module.css";
 import {
   isRefreshing,
   isUserLogged,
@@ -54,20 +56,20 @@ function Header({ resetToken, onResetPasswordSuccess }) {
         {authIsRefreshing && !resetToken ? (
           <button
             type="button"
-            className={css.accountIconButton}
+            className={iconCss.button}
             aria-label="Checking account"
             disabled
           >
-            <img src="/icons/user.svg" width="24" height="24" alt="" />
+            <HeaderIcon name="user" />
           </button>
         ) : isLogged && !resetToken ? (
           <Link
             to={`/profile/${encodeURIComponent(user.username)}`}
             state={{ from: location }}
-            className={css.accountIconButton}
+            className={iconCss.button}
             aria-label="Open your profile"
           >
-            <img src="/icons/user.svg" width="24" height="24" alt="" />
+            <HeaderIcon name="user" />
           </Link>
         ) : (
           <AuthModal

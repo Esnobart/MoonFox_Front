@@ -24,9 +24,11 @@ import {
   updateGuestBasketQuantity,
 } from "../../../utils/guestBasket.js";
 import api from "../../../../redux/api.js";
+import HeaderIcon from "../../Header/HeaderIcon.jsx";
+import iconCss from "../../Header/HeaderIconButton.module.css";
 import css from "./Basket.module.css";
 
-const formatPrice = (price) => `$${Number(price || 0).toFixed(2)}`;
+const formatPrice = (price) => `€${Number(price || 0).toFixed(2)}`;
 
 function Basket() {
   const dispatch = useDispatch();
@@ -127,27 +129,30 @@ function Basket() {
   };
 
   return (
-    <Dialog.Root onOpenChange={(open) => {
-      if (!open) return;
-      if (isLogged) {
-        dispatch(refreshBasket());
-      } else {
-        refreshGuestBasketProducts(async (id) => {
-          try { return (await api.get('products/' + encodeURIComponent(id))).data; }
-          catch (error) {
-            if (error.response?.status === 404) return null;
-            throw error;
-          }
-        }).catch(() => toast.error("Could not refresh basket details."));
-      }
-    }}>
+    <Dialog.Root
+      onOpenChange={(open) => {
+        if (!open) return;
+        if (isLogged) {
+          dispatch(refreshBasket());
+        } else {
+          refreshGuestBasketProducts(async (id) => {
+            try {
+              return (await api.get("products/" + encodeURIComponent(id))).data;
+            } catch (error) {
+              if (error.response?.status === 404) return null;
+              throw error;
+            }
+          }).catch(() => toast.error("Could not refresh basket details."));
+        }
+      }}
+    >
       <Dialog.Trigger asChild>
         <button
           type="button"
-          className={css.basketIconButton}
+          className={`${iconCss.button} ${css.basketIconButton}`}
           aria-label={`Open basket, ${itemCount} items`}
         >
-          <img src="/icons/basket.svg" alt="" className={css.basketIcon} />
+          <HeaderIcon name="basket" />
           {itemCount > 0 && (
             <span className={css.basketBadge} aria-hidden="true">
               {itemCount > 99 ? "99+" : itemCount}
@@ -203,7 +208,10 @@ function Basket() {
                           className={css.imageLink}
                         >
                           <img
-                            src={item.product.images?.[0] || "/images/product-placeholder.svg"}
+                            src={
+                              item.product.images?.[0] ||
+                              "/images/product-placeholder.svg"
+                            }
                             alt={item.product.name}
                             className={css.productImage}
                           />
@@ -225,7 +233,8 @@ function Basket() {
                               </Dialog.Close>
                             </h3>
                             <p className={css.productMeta}>
-                              {item.product.author?.username || "MoonFox artist"}
+                              {item.product.author?.username ||
+                                "MoonFox artist"}
                               {item.product.collectionName?.name
                                 ? ` / ${item.product.collectionName.name}`
                                 : ""}
@@ -244,7 +253,9 @@ function Basket() {
                             <button
                               type="button"
                               className={css.quantityButton}
-                              disabled={item.quantity <= 1 || (isLogged && isLoading)}
+                              disabled={
+                                item.quantity <= 1 || (isLogged && isLoading)
+                              }
                               onClick={() =>
                                 updateQuantity(productId, item.quantity - 1)
                               }

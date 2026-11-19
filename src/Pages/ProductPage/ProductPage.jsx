@@ -27,7 +27,7 @@ import {
 import { addGuestBasketProduct } from "../../utils/guestBasket.js";
 import css from "./ProductPage.module.css";
 
-const formatPrice = (price) => `$${Number(price || 0).toFixed(2)}`;
+const formatPrice = (price) => `€${Number(price || 0).toFixed(2)}`;
 
 const getProductId = (product) =>
   typeof product === "string" ? product : product?._id;
@@ -139,18 +139,11 @@ function ProductPage() {
       </Helmet>
 
       <div className={css.toolbar}>
-        <button
-          type="button"
-          className={css.backButton}
-          onClick={handleBack}
-        >
+        <button type="button" className={css.backButton} onClick={handleBack}>
           Back
         </button>
         {isAdmin && product && !isLoading && !isRejected && (
-          <Link
-            to={`/products/${product._id}/edit`}
-            className={css.editLink}
-          >
+          <Link to={`/products/${product._id}/edit`} className={css.editLink}>
             Edit product
           </Link>
         )}
@@ -188,7 +181,10 @@ function ProductPage() {
 
             <div className={css.metaList}>
               <Link
-                to={"/catalog?" + new URLSearchParams({ productType: getProductType(product) })}
+                to={
+                  "/catalog?" +
+                  new URLSearchParams({ productType: getProductType(product) })
+                }
                 state={{ from: location }}
                 className={css.metaItem}
               >
@@ -228,7 +224,11 @@ function ProductPage() {
               alt={activePhoto ? product.name : product.name + ": no photo"}
             />
             {images.length > 1 && (
-              <div className={css.thumbnails} role="group" aria-label="Product photos">
+              <div
+                className={css.thumbnails}
+                role="group"
+                aria-label="Product photos"
+              >
                 {images.map((url, index) => (
                   <button
                     key={url + "-" + index}

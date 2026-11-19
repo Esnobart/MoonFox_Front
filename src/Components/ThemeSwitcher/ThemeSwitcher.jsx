@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 
 import { useTheme } from "../../theme/ThemeContext.js";
+import HeaderIcon from "../Header/HeaderIcon.jsx";
+import iconCss from "../Header/HeaderIconButton.module.css";
 import css from "./ThemeSwitcher.module.css";
 
 const options = [
@@ -13,44 +15,6 @@ const options = [
     description: "Light from 07:00 to 19:00",
   },
 ];
-
-function ThemeIcon({ mode }) {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {mode === "system" && (
-        <>
-          <rect x="3" y="4" width="18" height="12" rx="2" />
-          <path d="M8 20h8m-4-4v4" />
-        </>
-      )}
-      {mode === "light" && (
-        <>
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
-        </>
-      )}
-      {mode === "dark" && (
-        <path d="M20.5 13a8.5 8.5 0 0 1-9.5-9.5A8.5 8.5 0 1 0 20.5 13Z" />
-      )}
-      {mode === "schedule" && (
-        <>
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 7v5l3 2" />
-        </>
-      )}
-    </svg>
-  );
-}
 
 export default function ThemeSwitcher() {
   const { preference, resolvedTheme, setPreference } = useTheme();
@@ -100,14 +64,14 @@ export default function ThemeSwitcher() {
       <button
         type="button"
         ref={triggerRef}
-        className={css.trigger}
+        className={iconCss.button}
         aria-label={`Appearance: ${selected.label}, ${resolvedTheme} theme`}
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
         title="Change appearance"
         onClick={() => setOpen((value) => !value)}
       >
-        <ThemeIcon mode={preference} />
+        <HeaderIcon name={preference} />
       </button>
 
       {open && (
@@ -124,7 +88,7 @@ export default function ThemeSwitcher() {
                   onChange={() => setPreference(option.value)}
                 />
                 <span className={css.optionIcon}>
-                  <ThemeIcon mode={option.value} />
+                  <HeaderIcon name={option.value} />
                 </span>
                 <span className={css.optionText}>
                   <span className={css.label}>{option.label}</span>

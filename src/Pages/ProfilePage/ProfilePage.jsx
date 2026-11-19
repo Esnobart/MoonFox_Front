@@ -27,7 +27,7 @@ import ProductSubmissionModal from "../../Components/Modals/ProductSubmission/Pr
 import { getUserImage } from "../../../redux/users/selectors.js";
 import css from "./ProfilePage.module.css";
 
-const formatPrice = (price) => `$${Number(price || 0).toFixed(2)}`;
+const formatPrice = (price) => `€${Number(price || 0).toFixed(2)}`;
 const normalizeUsername = (username = "") => username.trim().toLowerCase();
 
 function ProductGrid({ products, location, emptyMessage }) {
@@ -129,13 +129,7 @@ function ProfilePage() {
     return () => {
       dispatch(clearProfile());
     };
-  }, [
-    currentUser.role,
-    dispatch,
-    isAuthRefreshing,
-    isOwnProfile,
-    username,
-  ]);
+  }, [currentUser.role, dispatch, isAuthRefreshing, isOwnProfile, username]);
 
   const handleBack = () => {
     if (window.history.length > 1) {
@@ -198,7 +192,9 @@ function ProfilePage() {
               ) : (
                 <span aria-hidden="true">{initial}</span>
               )}
-              <span className={css.avatarOverlay} aria-hidden="true">Edit</span>
+              <span className={css.avatarOverlay} aria-hidden="true">
+                Edit
+              </span>
             </Link>
           ) : (
             <div className={css.avatar}>
@@ -265,7 +261,9 @@ function ProfilePage() {
           {isOwnProfile && areProductsLoading && products.length === 0 ? (
             <p className={css.emptyState}>Loading published works...</p>
           ) : isOwnProfile && productsError ? (
-            <p className={css.emptyState}>Published works could not be loaded.</p>
+            <p className={css.emptyState}>
+              Published works could not be loaded.
+            </p>
           ) : (
             <ProductGrid
               products={products}

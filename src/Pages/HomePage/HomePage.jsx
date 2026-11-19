@@ -36,6 +36,33 @@ function Arrow() {
   );
 }
 
+function HomeSectionHeader({
+  title,
+  id,
+  to,
+  label,
+  location,
+  primary = false,
+}) {
+  const Heading = primary ? "h1" : "h2";
+
+  return (
+    <div className={css.sectionHeader}>
+      <Heading id={id} className={css.sectionTitle}>
+        {title}
+      </Heading>
+      <Link
+        to={to}
+        state={{ from: location }}
+        className={css.sectionLink}
+        aria-label={label}
+      >
+        View all <Arrow />
+      </Link>
+    </div>
+  );
+}
+
 function HomePage() {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -136,10 +163,15 @@ function HomePage() {
         <title>MoonFox | Home</title>
       </Helmet>
 
-      <section className={css.collabSection}>
-        <div className={css.sectionHeader}>
-          <h1 className={css.sectionTitle}>Official Artist Collab</h1>
-        </div>
+      <section className={css.homeSection} aria-labelledby="home-popular-title">
+        <HomeSectionHeader
+          title="Official Artist Collab"
+          id="home-popular-title"
+          to="/catalog?type=popular"
+          label="View all popular works"
+          location={location}
+          primary
+        />
 
         <ul
           ref={popularListRef}
@@ -189,34 +221,27 @@ function HomePage() {
                     {product.collectionName?.name || "Independent work"}
                   </Link>
                   <p className={css.productPrice}>
-                    {`$${Number(product.price || 0).toFixed(2)}`}
+                    {`€${Number(product.price || 0).toFixed(2)}`}
                   </p>
                 </div>
               </div>
             </li>
           ))}
         </ul>
-
-        <div className={css.viewAllRow}>
-          <Link
-            to="/catalog?type=popular"
-            state={{ from: location }}
-            className={css.viewAllLink}
-          >
-            View all
-          </Link>
-        </div>
       </section>
 
-      <section className={css.section} aria-labelledby="home-collections-title">
+      <section
+        className={css.homeSection}
+        aria-labelledby="home-collections-title"
+      >
+        <HomeSectionHeader
+          title="Collections"
+          id="home-collections-title"
+          to="/catalog?type=collections"
+          label="View all collections"
+          location={location}
+        />
         <div className={css.inner}>
-          <div className={css.header}>
-            <h2 id="home-collections-title" className={css.sectionTitle}>
-              Collections
-            </h2>
-            <span className={css.headerLine} aria-hidden="true" />
-          </div>
-
           <ul
             id="home-collections-board"
             className={css.board}
@@ -266,28 +291,17 @@ function HomePage() {
               </li>
             ))}
           </ul>
-
-          <div className={css.footer}>
-            <Link
-              to="/catalog?type=collections"
-              state={{ from: location }}
-              className={css.catalogLink}
-            >
-              All collections <Arrow />
-            </Link>
-          </div>
         </div>
       </section>
 
-      <section
-        className={css.artistsSection}
-        aria-labelledby="home-artists-title"
-      >
-        <div className={css.sectionHeader}>
-          <h2 id="home-artists-title" className={css.sectionTitle}>
-            Follow the Artists
-          </h2>
-        </div>
+      <section className={css.homeSection} aria-labelledby="home-artists-title">
+        <HomeSectionHeader
+          title="Follow the Artists"
+          id="home-artists-title"
+          to="/catalog?type=authors"
+          label="View all artists"
+          location={location}
+        />
 
         <div className={css.artistMarquees}>
           {artistRows.map(
@@ -302,16 +316,6 @@ function HomePage() {
                 />
               ),
           )}
-        </div>
-
-        <div className={`${css.viewAllRow} ${css.artistActions}`}>
-          <Link
-            to="/catalog?type=authors"
-            state={{ from: location }}
-            className={css.viewAllLink}
-          >
-            View all
-          </Link>
         </div>
       </section>
     </section>

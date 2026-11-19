@@ -1,20 +1,5 @@
 .basketIconButton {
   position: relative;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-
-.basketIcon {
-  width: 24px;
-  height: 24px;
-  filter: var(--icon-filter);
 }
 
 .basketBadge {

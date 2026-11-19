@@ -3,6 +3,9 @@
   min-width: 0;
   overflow: hidden;
   padding-block: 6px;
+  touch-action: pan-y pinch-zoom;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .track {
@@ -15,9 +18,14 @@
   animation-direction: reverse;
 }
 
-.viewport:hover .track,
-.viewport:focus-within .track {
+.viewport[data-touch-active="true"] .track {
   animation-play-state: paused;
+}
+
+@media (hover: hover) {
+  .viewport:hover .track {
+    animation-play-state: paused;
+  }
 }
 
 .list {

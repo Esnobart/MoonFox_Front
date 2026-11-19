@@ -6,6 +6,8 @@ import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignupForm.jsx";
 import ForgotPasswordForm from "./ForgotPasswordForm.jsx";
 import ResetPasswordForm from "./ResetPasswordForm.jsx";
+import HeaderIcon from "../../Header/HeaderIcon.jsx";
+import iconCss from "../../Header/HeaderIconButton.module.css";
 
 function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
   const [mode, setMode] = useState(resetToken ? "resetPassword" : "login");
@@ -22,16 +24,10 @@ function UserAuthModal({ resetToken, onResetPasswordSuccess }) {
       <Dialog.Trigger asChild>
         <button
           type="button"
-          className={css.UserIconButton}
+          className={iconCss.button}
           aria-label="Open account menu"
         >
-          <img
-            src="/icons/user.svg"
-            width="24"
-            height="24"
-            alt=""
-            aria-hidden="true"
-          />
+          <HeaderIcon name="user" />
         </button>
       </Dialog.Trigger>
 

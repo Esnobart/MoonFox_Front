@@ -6,6 +6,7 @@ import {
   createSmoothScroll,
   getWheelScrollDelta,
 } from "../../utils/horizontalScroll.js";
+import { attachHorizontalSwipe } from "../../utils/horizontalSwipe.js";
 import css from "./ArtistMarquee.module.css";
 
 function ArtistMarquee({ authors, location, direction, label }) {
@@ -53,7 +54,7 @@ function ArtistMarquee({ authors, location, direction, label }) {
     const viewport = viewportRef.current;
 
     let remainder = 0;
-    const smoothScroll = createSmoothScroll((delta) => {
+    const scrollBy = (delta) => {
       const track = trackRef.current;
       const animation = track.getAnimations()[0];
 
@@ -80,7 +81,21 @@ function ArtistMarquee({ authors, location, direction, label }) {
         viewport.scrollLeft = nextScrollLeft;
         remainder = nextScrollLeft - viewport.scrollLeft;
       }
+    };
+    const smoothScroll = createSmoothScroll(scrollBy);
+    const removeSwipe = attachHorizontalSwipe(viewport, {
+      onStart: () => {
+        smoothScroll.cancel();
+        viewport.dataset.touchActive = "true";
+      },
+      onMove: scrollBy,
+      onEnd: () => {
+        delete viewport.dataset.touchActive;
+      },
     });
+    const resetPointerFocus = () => {
+      pointerFocusRef.current = false;
+    };
 
     const scrollWithWheel = (event) => {
       if (event.ctrlKey) return;
@@ -95,8 +110,11 @@ function ArtistMarquee({ authors, location, direction, label }) {
     };
 
     viewport.addEventListener("wheel", scrollWithWheel, { passive: false });
+    document.addEventListener("keydown", resetPointerFocus, true);
     return () => {
       viewport.removeEventListener("wheel", scrollWithWheel);
+      document.removeEventListener("keydown", resetPointerFocus, true);
+      removeSwipe();
       smoothScroll.cancel();
     };
   }, [direction, keyboardFocused]);
@@ -108,18 +126,6 @@ function ArtistMarquee({ authors, location, direction, label }) {
       data-keyboard-focused={keyboardFocused}
       onPointerDownCapture={() => {
         pointerFocusRef.current = true;
-      }}
-      onPointerUpCapture={() => {
-        pointerFocusRef.current = false;
-      }}
-      onPointerCancel={() => {
-        pointerFocusRef.current = false;
-      }}
-      onPointerLeave={() => {
-        pointerFocusRef.current = false;
-      }}
-      onKeyDownCapture={() => {
-        pointerFocusRef.current = false;
       }}
       onFocusCapture={() => {
         if (!pointerFocusRef.current) setKeyboardFocused(true);
@@ -162,12 +168,14 @@ function ArtistMarquee({ authors, location, direction, label }) {
                       to={`/catalog?${new URLSearchParams({ author: author.username })}`}
                       state={{ from: location }}
                       className={css.link}
+                      draggable={false}
                       aria-label={`View works by ${author.username}`}
                       tabIndex={isDuplicate ? -1 : undefined}
                     >
                       {banner && (
                         <img
                           className={css.image}
+                          draggable={false}
                           src={banner}
                           alt=""
                           loading="lazy"
